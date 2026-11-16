@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>学习助手 · 主板分层图（交互）</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#fff; --line:#e2e6ea; --txt:#1b2733; --mut:#6b7a88; --dim:#9aa7b3;
+    --boost:#e8590c; --buck:#1f6feb; --ldo:#0b8457; --hbr:#c92a2a; --prot:#7048e8; --samp:#0b7285; --dig:#495057;
+    --mono:ui-monospace,Consolas,"Cascadia Mono",monospace;
+    --sans:"Microsoft YaHei","Noto Sans SC","PingFang SC",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:14px;
+       height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  header{padding:14px 22px 12px;background:#fff;border-bottom:1px solid var(--line);flex:0 0 auto}
+  .h1{font-size:17px;font-weight:700;letter-spacing:.3px}
+  .h2{margin-top:3px;font-size:12.5px;color:var(--mut)}
+  .keybox{display:flex;gap:18px;flex-wrap:wrap;margin-top:9px;font-size:11.5px;color:var(--mut)}
+  .keybox b{color:var(--txt);font-weight:600}
+  .chip{display:inline-block;padding:1px 7px;border-radius:999px;border:1px solid;font-size:11px;font-family:var(--mono)}
+  .c-l{color:#111;border-color:#111;background:#fff}
+  .c-p{color:#1f6feb;border-color:#cfe0ff;background:#f0f6ff}
+  .c-m{color:#b35c00;border-color:#ffe0bf;background:#fff7ed}
+  .c-o{color:#374151;border-color:#d1d5db;background:#fff}
+  main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 420px}
+  .stackwrap{overflow:auto;padding:18px 22px 30px}
+  .stack{max-width:820px;margin:0 auto}
+  .layer{position:relative;display:flex;align-items:center;gap:14px;background:var(--card);
+         border:1px solid var(--line);border-radius:11px;padding:13px 15px;cursor:pointer;
+         box-shadow:0 2px 0 #e6eaee,0 8px 18px rgba(20,35,50,.045);transition:.16s}
+  .layer:hover{transform:translateY(-1px);border-color:#c9d3dc;box-shadow:0 2px 0 #dfe5ea,0 12px 22px rgba(20,35,50,.07)}
+  .layer.sel{border-color:#111;box-shadow:0 2px 0 #111,0 12px 24px rgba(20,35,50,.10)}
+  .bar{width:6px;align-self:stretch;border-radius:4px;background:var(--c)}
+  .lid{font:600 12px var(--mono);color:var(--dim);width:26px;flex:0 0 26px}
+  .mid{min-width:0;flex:1}
+  .nm{font-size:15px;font-weight:650}
+  .sub{font-size:12px;color:var(--mut);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .vol{font:600 12.5px var(--mono);color:#33424f;background:#f2f5f7;border:1px solid var(--line);
+       padding:3px 8px;border-radius:6px;white-space:nowrap}
+  .tags{display:flex;gap:6px;flex:0 0 auto}
+  .arrow{height:34px;display:flex;align-items:center;justify-content:center;gap:9px;color:var(--dim);font-size:11px}
+  .arrow i{display:block;width:1px;height:20px;background:linear-gradient(#d6dde3,#b9c4ce)}
+  .arrow .v{font-family:var(--mono);color:#7b8a97}
+  .oldon .layer.oldcov{border-left:3px solid #9aa7b3}
+  .flag{position:absolute;right:-1px;top:-9px;font-size:10px;padding:1px 6px;border-radius:4px 4px 0 0;
+        background:#eef1f4;color:#68757f;border:1px solid var(--line);border-bottom:0}
+  aside{background:#fff;border-left:1px solid var(--line);overflow:auto;padding:18px 20px 40px}
+  .dh{font-size:16px;font-weight:700}
+  .dv{font:12px var(--mono);color:var(--mut);margin-top:3px}
+  .dg{display:flex;gap:7px;margin:10px 0 12px;flex-wrap:wrap}
+  aside h4{margin:16px 0 6px;font-size:11.5px;letter-spacing:.8px;color:var(--dim);font-weight:600}
+  aside p{margin:0 0 8px;font-size:13px;line-height:1.62;color:#33424f}
+  .kv{margin:0;font-size:12.5px;line-height:1.58;color:#33424f}
+  .kv b{color:#111}
+  .sim{border-left:2px solid var(--buck);background:#f4f8ff;padding:8px 10px;border-radius:0 6px 6px 0;font-size:12.5px;color:#28486f;line-height:1.55}
+  .sim.no{border-left-color:#adb5bd;background:#f6f7f8;color:#5b6773}
+  .st{margin-top:10px;font-size:12px;color:var(--mut)}
+  .topo{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .tp{font-size:11px;padding:3px 8px;border-radius:6px;border:1px solid;background:#fff}
+  .t-boost{color:var(--boost);border-color:#ffd8bd;background:#fff6ef}
+  .t-buck{color:var(--buck);border-color:#cfe0ff;background:#f2f8ff}
+  .t-ldo{color:var(--ldo);border-color:#c6e9d8;background:#f1fbf6}
+  .t-hbr{color:var(--hbr);border-color:#ffd0d0;background:#fff5f5}
+  .t-prot{color:var(--prot);border-color:#e0d7ff;background:#f7f4ff}
+  .t-samp{color:var(--samp);border-color:#c5e6ec;background:#f1fafb}
+  .t-dig{color:var(--dig);border-color:#dde2e7;background:#f7f8f9}
+  .legend{margin-top:22px;border-top:1px dashed var(--line);padding-top:14px;font-size:11.5px;color:var(--mut);line-height:1.7}
+  @media (max-width:1080px){ main{grid-template-columns:1fr} aside{border-left:0;border-top:1px solid var(--line)} }
+  footer{flex:0 0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+         padding:9px 22px;background:#fff;border-top:1px solid var(--line)}
+  .fl{font-size:11.5px;color:var(--mut)}
+  .fl2{font-size:11.5px;color:var(--dim);margin-left:auto}
+</style>
+</head>
+<body>
+<header>
+  <div class="h1">学习助手 · 主板分层图</div>
+  <div class="h2">按能量流向从上到下排；每一层标注它在哪一页、属于哪个模块。点任意一层看细节。</div>
+  <div class="keybox">
+    <span><b>L0–L6</b> 能量链的“层”（这张图的主轴）</span>
+    <span><span class="chip c-p">P1</span> 合并板原理图页（P1–P9）</span>
+    <span><span class="chip c-m">M1</span> 功能模块（M1–M9，与页一一对应）</span>
+    <span><b>旧 P2</b> 已画好的旧电源板页（灰色角标）</span>
+  </div>
+</header>
+
+<main>
+  <div class="stackwrap"><div class="stack" id="stack"></div></div>
+  <aside id="panel"></aside>
+</main>
+
+<footer>
+  <span class="fl">这套图用了 5 类拓扑：</span>
+  <span class="tp t-boost">Boost ×1 · IP2326</span>
+  <span class="tp t-buck">Buck ×1 · MP2315</span>
+  <span class="tp t-ldo">LDO ×1 · AMS1117</span>
+  <span class="tp t-hbr">H 桥 ×2 · DRV8871</span>
+  <span class="tp t-prot">保护 / 直通 ×3</span>
+  <span class="tp t-samp">采样 ×1 · INA219</span>
+  <span class="fl2">没用到的：隔离、升降压、电荷泵、反激</span>
+</footer>
+
+<script>
+const LAYERS = [
+  {lid:'L0', name:'输入与保护', vol:'5 V', flow:'5 V', topo:'保护 · 直通', cls:'t-prot', color:'#7048e8',
+   sub:'USB-C 16P · F1 3A · SMAJ5.0A · 20µF', page:'P1', mod:'M1', old:'旧 P1', oldcov:true,
+   what:'把 USB 的 5 V 引进来，挡住过流和浪涌。只做受电，没有 PD 快充、没有数据线。',
+   why:'TVS 钳位 9.2 V，低于后级 IP2326 的 25 V 耐压；保险丝在 TVS 之前，TVS 击穿时由保险丝切断。CC 各 5.1 kΩ 下拉，正反插都能取电。',
+   key:'J1（16P，CC1/CC2 5.1k）· F1 3A/1206 · D1 SMAJ5.0A · C1/C2 10µF/25V · C3 100nF',
+   sim:'不需要仿真，ERC + 万用表即可', simok:false,
+   st:'旧板已画，合并板直接移植（含 J1 方向修正）'},
+
+  {lid:'L1', name:'升压充电', vol:'5 → 8.4 V', flow:'8.4 V', topo:'Boost · CC/CV', cls:'t-boost', color:'#e8590c',
+   sub:'IP2326 · 2.2µH · 1A · NTC · 12h 超时', page:'P1', mod:'M1', old:'旧 P2', oldcov:true,
+   what:'把 5 V 升到 8.4 V，先恒流 1 A、到 8.4 V 后恒压，给 2S 电池充电。',
+   why:'这是整板唯一的升压拓扑。CC/CV 是两个误差放大器“取小”：电池电压低时恒流环赢，到 8.4 V 后恒压环赢。',
+   key:'U1 IP2326（ISET 90k=1A，VSET NC=8.4V，TIME 120k=12h）· L1 2.2µH/5A · C4/C5 22µF（VSYS）· C6 10µF · C7 0.1µF（BST）· NTC 47k B4100 外接电芯',
+   sim:'可以仿：把充电器抽象成“恒流源 + 8.4V 钳位”，看电池电压上升和进入 CV 的拐点', simok:true,
+   st:'旧板已画；合并板移植时改 NTC 外接、TIME 120k'},
+
+  {lid:'L2', name:'电池与 BMS', vol:'6.6–8.4 V', flow:'VBAT', topo:'保护 · 直通', cls:'t-prot', color:'#7048e8',
+   sub:'2S 18650 2000mAh · 15A 共口 BMS', page:'P2', mod:'M2', old:'旧 P3', oldcov:true,
+   what:'电池的正负极经 BMS 的 MOSFET 出来，过充/过放/过流/短路都由它兜底。',
+   why:'BMS 是“最后一道闸”：任何一级电源出事，它都能把电芯断开。共口板充放电都走 P+/P−。',
+   key:'BT1 XT30（电芯）· J2 5 焊盘（B−/BM/B+/P+/P−）· 15A BMS · 电池包 40×66×25',
+   sim:'不需要：这是保护器件，靠实测跳闸点', simok:false,
+   st:'旧板已画；合并板要把 J2 改成 5 焊盘、引出 BM 中点'},
+
+  {lid:'L3', name:'电流采样', vol:'—', flow:'VBAT', topo:'采样 · INA219', cls:'t-samp', color:'#0b7285',
+   sub:'0.01Ω 2512 · I²C 0x40 · 4mA 分辨率', page:'P2', mod:'M2', old:'旧 P3', oldcov:true,
+   what:'把电池的净电流变成毫伏级压差，给固件做电量计、堵转判断和低电保护。',
+   why:'采样电阻放在“电池支路”而不是“系统支路”，充电读负、放电读正，才是真正的电池电流。',
+   key:'R15 0.01Ω 1% 2512（3.7A 时 37mV / 0.14W）· INA219 模块（PGA/8，LSB 40µV）· Kelvin 走线',
+   sim:'值得仿：0.01Ω + 差分放大器，验证 3.7A 时的压差、共模（8.4V）是否在量程内', simok:true,
+   st:'旧板已画；合并板把 U1 VOUT 改接 VBAT_SYS（P1-1 整改）'},
+
+  {lid:'L4', name:'5V 降压', vol:'8.4 → 5 V', flow:'5 V', topo:'Buck', cls:'t-buck', color:'#1f6feb',
+   sub:'MP2315 · 4.7µH · 2A · 500kHz', page:'P3', mod:'M3', old:'旧 P4', oldcov:true,
+   what:'把 6.6–8.4 V 的电池电压降到稳定的 5 V，给屏、功放、灯和 DevKit 供电。',
+   why:'压差 1.6–3.4 V、电流 1 A，线性方案会烧掉 3 W，只能用 Buck。',
+   key:'U3 MP2315（FB 40.2k/7.5k → 5.03V，AAM 76.8k，EN 100k）· L2 4.7µH/3A · C12 10µF · C15/C16 22µF',
+   sim:'值得仿（第一个试验台）：0.2A→1.0A 负载阶跃，看跌落与恢复', simok:true,
+   st:'旧板已画；合并板按评审结论重排 FB、加大线宽'},
+
+  {lid:'L5', name:'3.3V', vol:'5 → 3.3 V', flow:'3.3 V', topo:'LDO', cls:'t-ldo', color:'#0b8457',
+   sub:'DevKit 板载 AMS1117 · 0.35A 峰值', page:'P4', mod:'M4', old:'旧 P4b', oldcov:true,
+   what:'给 ESP32-S3 和所有传感器供 3.3 V。',
+   why:'合并后 3.3 V 只保留一个来源——DevKit 自带的那颗。原来的 AP2112 删掉，P1-3 的过热问题随之消失。',
+   key:'DevKit 3V3 出口 10µF + 100nF · 每个传感器座旁 100nF · I²C 上拉 4.7k×2',
+   sim:'不建议仿（在模块内部，拿不到模型）；靠实测温升', simok:false,
+   st:'合并板新画（旧的 AP2112 页作废）'},
+
+  {lid:'L6', name:'负载分配', vol:'5 / 3.3 / VM', flow:'', topo:'H 桥 · 数字', cls:'t-dig', color:'#495057',
+   sub:'电机 ×2 · 屏 · IMU · 传感器 · 音频 · 灯', page:'P5–P9', mod:'M5–M9', old:'旧 P5（仅接口）', oldcov:false,
+   what:'所有用电的东西：两路电机（直取电池）、屏、IMU、四个 I²C 传感器、麦克风与功放、灯环与按键。',
+   why:'电机走 VM 直供（2.7A 堵转不能挂在 5V 上）；屏/音频走 5V；ESP32 与传感器走 3.3V。这一层不再是“一层”，而是五条并联支路。',
+   key:'DRV8871×2（ILIM 33k=1.8A）· 屏 8P · ICM-42688 · SHT30/BH1750/VL53L1X · MAX98357A · WS2812 · 急停串 VM',
+   sim:'电机可以仿（行为级 H 桥）：堵转时 VM 跌到多少、限流是否先动作', simok:true,
+   st:'全部新画；传感器与灯环挪到前面板小板（10P 排线）'}
+];
+
+const stack = document.getElementById('stack');
+const panel = document.getElementById('panel');
+
+function chip(cls, txt){ return `<span class="chip ${cls}">${txt}</span>`; }
+
+LAYERS.forEach((L, i) => {
+  const d = document.createElement('div');
+  d.className = 'layer' + (L.oldcov ? ' oldcov' : '');
+  d.style.setProperty('--c', L.color);
+  d.innerHTML = `
+    ${L.oldcov ? '<span class="flag">旧板已画</span>' : ''}
+    <div class="bar"></div>
+    <div class="lid">${L.lid}</div>
+    <div class="mid">
+      <div class="nm">${L.name}</div>
+      <div class="sub">${L.sub}</div>
+    </div>
+    <div class="vol">${L.vol}</div>
+    <div class="tags">
+      ${chip('c-p', L.page)}${chip('c-m', L.mod)}${L.old !== '—' ? chip('c-o', L.old) : ''}
+    </div>`;
+  d.onclick = () => select(i);
+  stack.appendChild(d);
+  if (i < LAYERS.length - 1) {
+    const a = document.createElement('div');
+    a.className = 'arrow';
+    a.innerHTML = `<i></i><span class="v">${L.flow}</span><i></i>`;
+    stack.appendChild(a);
+  }
+});
+
+let cur = -1;
+function select(i){
+  cur = i;
+  [...stack.querySelectorAll('.layer')].forEach((el, k) => el.classList.toggle('sel', k === i));
+  const L = LAYERS[i];
+  panel.innerHTML = `
+    <div class="dh">${L.lid} · ${L.name}</div>
+    <div class="dv">${L.vol}　·　${L.topo}</div>
+    <div class="dg">${chip('c-p', '合并板 ' + L.page)}${chip('c-m', L.mod)}${L.old !== '—' ? chip('c-o', L.old) : ''}</div>
+    <h4>这一层做什么</h4><p>${L.what}</p>
+    <h4>为什么用这个拓扑</h4><p>${L.why}</p>
+    <h4>关键器件与参数</h4><p class="kv">${L.key}</p>
+    <h4>能不能仿真</h4>
+    <div class="sim ${L.simok ? '' : 'no'}">${L.sim}</div>
+    <div class="st">状态：${L.st}</div>`;
+}
+
+select(1);
+</script>
+</body>
+</html>

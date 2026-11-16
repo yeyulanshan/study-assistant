@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="sky" data-density="cozy" data-display="serif">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#BFDCF2">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2322364D'/%3E%3Cpath d='M18 32h28' stroke='%23F5D37D' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>一章书 · 学习台</title>
+<meta name="description" content="把读一章拆成动作：今天、章节、专注、收束、复习。安静、可长时间使用的学习台。">
+<style>
+:root{
+  --ground:#9BC6E2;
+  --bg-a:#B4D6EC;--bg-b:#9BC6E2;--bg-c:#84B5D4;--glow:rgba(249,213,137,.2);
+  --ground-deep:#84B5D4;
+  --surface:#FFF9EC;
+  --surface-2:rgba(255,255,255,.38);
+  --ink:#22364D;
+  --ink-2:#3D5064;
+  --line:rgba(34,54,77,.16);
+  --accent:#F3C963;
+  --accent-hover:#EBBB48;
+  --on-accent:#22344A;
+  --link:#2C5F8C;
+  --danger:#A34A3C;
+  --peach:#E3A268;
+
+  --glass:rgba(255,248,236,.38);
+  --glass-line:rgba(255,255,255,.72);
+  --glass-shadow:0 24px 55px rgba(24,62,95,.16);
+  --glass-blur:24px;
+  --sheen:linear-gradient(135deg, rgba(255,255,255,.26), rgba(255,255,255,0) 55%);
+
+  --night:#12243A;
+  --night-2:#1B3350;
+  --night-ink:#F6EFDF;
+  --night-ink-2:#A9B9C9;
+  --night-accent:#F5D37D;
+
+  --serif:"Noto Serif SC","Source Han Serif SC","Songti SC","STSong",serif;
+  --sans:"Noto Sans SC","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-display:var(--serif);
+
+  --pad:clamp(20px,4vw,40px);
+  --gap:clamp(56px,8vw,96px);
+  --radius:24px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+}
+:root[data-theme="cream"]{
+  --ground:#F4EEE2;--bg-a:#F8F2E7;--bg-b:#F4EEE2;--bg-c:#E9DDC8;--glow:rgba(255,255,255,.4);
+  --ground-deep:#E8DCC6;
+  --ink:#2B3542;--ink-2:#6B6253;--line:rgba(43,53,66,.15);
+  --accent:#EFC46B;--accent-hover:#E6B552;--link:#7A5A2E;
+  --glass:rgba(255,252,246,.6);--glass-line:rgba(255,255,255,.7);
+  --glass-shadow:0 24px 60px rgba(96,74,40,.14);
+}
+:root[data-theme="mist"]{
+  --ground:#E3E9EC;--bg-a:#EEF2F4;--bg-b:#E3E9EC;--bg-c:#D3DFE5;--glow:rgba(240,206,124,.22);
+  --ground-deep:#CED9DF;
+  --ink:#26333D;--ink-2:#56646E;--line:rgba(38,51,61,.14);
+  --accent:#F0CE7C;--accent-hover:#E7BF60;--link:#2F5E7A;
+  --glass:rgba(255,255,255,.52);--glass-line:rgba(255,255,255,.68);
+  --glass-shadow:0 24px 60px rgba(45,65,80,.14);
+}
+:root[data-display="sans"]{--font-display:var(--sans)}
+:root[data-density="compact"]{--gap:clamp(40px,5vw,64px)}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{margin:0}
+body{
+  background-color:var(--ground);
+  background-image:
+    radial-gradient(560px 500px at 80% 22%, var(--glow), transparent 64%),
+    linear-gradient(180deg, var(--bg-a) 0%, var(--bg-b) 48%, var(--bg-c) 100%);
+  background-attachment:fixed;
+  color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.75;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  transition:background-color .52s var(--ease),color .52s var(--ease);
+}
+body[data-route="focus"]{
+  background-color:var(--night);
+  background-image:
+    radial-gradient(900px 620px at 50% -6%, rgba(245,211,125,.16), rgba(245,211,125,0) 62%),
+    radial-gradient(1000px 720px at 88% 94%, rgba(84,153,220,.3), rgba(84,153,220,0) 66%);
+  color:var(--night-ink);
+}
+::selection{background:var(--accent);color:var(--on-accent)}
+:focus-visible{outline:2px solid var(--link);outline-offset:3px;border-radius:4px}
+body[data-route="focus"] :focus-visible{outline-color:var(--night-accent)}
+
+/* 毛玻璃：只给真正浮起来的卡片和弹层 */
+.glass{
+  background-color:var(--glass);
+  background-image:var(--sheen);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.25);
+  backdrop-filter:blur(var(--glass-blur)) saturate(1.25);
+  border:1px solid var(--glass-line);
+  box-shadow:var(--glass-shadow), inset 0 1px 0 rgba(255,255,255,.7);
+}
+
+h1,h2,h3{font-family:var(--font-display);font-weight:500;margin:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+a{color:inherit;text-decoration:none}
+input,textarea,select{font:inherit;color:inherit}
+[hidden]{display:none !important}
+
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--ground);padding:10px 16px;z-index:100}
+.skip:focus{left:12px;top:12px}
+
+/* ---------- 顶栏 ---------- */
+.top{
+  position:sticky;top:0;z-index:30;padding:0 var(--pad);
+  background:rgba(255,255,255,.18);
+  -webkit-backdrop-filter:blur(18px) saturate(1.2);
+  backdrop-filter:blur(18px) saturate(1.2);
+  border-bottom:1px solid rgba(255,255,255,.45);
+  box-shadow:0 10px 30px rgba(28,64,96,.07);
+}
+.top-inner{display:flex;align-items:center;gap:clamp(20px,4vw,48px);max-width:1020px;margin:0 auto;padding:16px 0}
+.brand{font-family:var(--font-display);font-size:19px;letter-spacing:.01em}
+.nav{display:flex;gap:26px;font-size:14px;color:var(--ink-2)}
+.nav a{padding:4px 0;transition:color .18s var(--ease)}
+.nav a:hover{color:var(--ink)}
+.nav a[aria-current="page"]{color:var(--ink);font-weight:500}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.top-date{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.save-note{font-size:13px;color:var(--ink-2);opacity:0;transition:opacity .3s var(--ease)}
+.save-note.is-on{opacity:.85}
+
+/* ---------- 页面骨架 ---------- */
+main{display:block}
+.page{max-width:1100px;margin:0 auto;padding:clamp(36px,6vw,84px) var(--pad) 120px;display:none}
+.page.is-active{display:block}
+.page.is-active .today h1,
+.page.is-active .today-lede,
+.page.is-active .today-actions,
+.page.is-active .aside-label,
+.page.is-active .aside-capsule,
+.page.is-active .dot,
+.page.is-active .progress-meta,
+.page.is-active .stat,
+.page.is-active .page-head,
+.page.is-active .chapter-goal,
+.page.is-active .chapter-finish,
+.page.is-active .action,
+.page.is-active .preflight,
+.page.is-active .parking,
+.page.is-active .close-sub,
+.page.is-active .close-wrap h1,
+.page.is-active .step-title,
+.page.is-active .field,
+.page.is-active .step-nav,
+.page.is-active .step-count,
+.page.is-active .stepper,
+.page.is-active .review-list li,
+.page-focus.is-active .focus-label,
+.page-focus.is-active .focus-title,
+.page-focus.is-active .timer,
+.page-focus.is-active .focus-actions,
+.page-focus.is-active .focus-note,
+.page-focus.is-active .focus-top .textbtn,
+.page-focus.is-active .focus-top .preset{animation:rise .46s var(--ease) both}
+.page.is-active .today-lede{animation-delay:.05s}
+.page.is-active .today-actions{animation-delay:.1s}
+.page.is-active .aside-label{animation-delay:.12s}
+.page.is-active .aside-capsule{animation-delay:.16s}
+.page.is-active .dot:nth-child(1){animation-delay:.2s}
+.page.is-active .dot:nth-child(2){animation-delay:.23s}
+.page.is-active .dot:nth-child(3){animation-delay:.26s}
+.page.is-active .dot:nth-child(4){animation-delay:.29s}
+.page.is-active .dot:nth-child(5){animation-delay:.32s}
+.page.is-active .dot:nth-child(6){animation-delay:.35s}
+.page.is-active .dot:nth-child(7){animation-delay:.38s}
+.page.is-active .progress-meta{animation-delay:.24s}
+.page.is-active .stat:nth-child(2){animation-delay:.06s}
+.page.is-active .stat:nth-child(3){animation-delay:.12s}
+.page.is-active .action:nth-child(2){animation-delay:.03s}
+.page.is-active .action:nth-child(3){animation-delay:.06s}
+.page.is-active .action:nth-child(4){animation-delay:.09s}
+.page.is-active .action:nth-child(5){animation-delay:.12s}
+.page.is-active .action:nth-child(6){animation-delay:.15s}
+.page.is-active .action:nth-child(7){animation-delay:.18s}
+.page-focus.is-active .focus-title{animation-delay:.05s}
+.page-focus.is-active .timer{animation-delay:.1s}
+.page-focus.is-active .focus-actions{animation-delay:.16s}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- 按钮 ---------- */
+.primary{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-height:52px;padding:0 30px;border-radius:999px;
+  background:var(--accent);color:var(--on-accent);
+  font-size:15.5px;font-weight:600;letter-spacing:.01em;
+  transition:background-color .18s var(--ease),transform .14s var(--ease);
+}
+.primary:hover{background:var(--accent-hover)}
+.primary:active{transform:translateY(1px) scale(.995)}
+.primary.light{background:var(--accent);color:var(--on-accent)}
+.primary.light:hover{background:var(--accent-hover)}
+.primary.danger{background:var(--danger);color:#fff}
+.textbtn{
+  display:inline-flex;align-items:center;min-height:44px;padding:0 2px;
+  font-size:14.5px;color:var(--ink-2);
+  border-bottom:1px solid transparent;
+  transition:color .18s var(--ease),border-color .18s var(--ease);
+}
+.textbtn:hover{color:var(--ink);border-color:currentColor}
+.textbtn.light{color:var(--night-ink-2)}
+.textbtn.light:hover{color:var(--night-ink)}
+.linkbtn{font-size:14px;color:var(--link);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px}
+.linkbtn:hover{color:var(--accent-hover)}
+body[data-route="focus"] .linkbtn{color:var(--night-accent)}
+
+/* ---------- 今日 ---------- */
+.today{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(280px,.75fr);gap:clamp(32px,6vw,88px);align-items:start}
+.today h1{font-size:clamp(42px,5.6vw,72px);line-height:1.1;letter-spacing:-.022em}
+.today-lede{margin-top:20px;font-size:clamp(17px,1.5vw,19px);line-height:1.72;max-width:30em;color:var(--ink)}
+.today-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:38px}
+.today-hint{font-size:13.5px;color:var(--ink-2)}
+.today-aside{border-radius:var(--radius);padding:clamp(24px,3vw,34px);margin-top:6px}
+.aside-label{font-size:13px;color:var(--ink-2);margin-bottom:14px}
+.aside-capsule{font-family:var(--font-display);font-size:clamp(17px,1.5vw,19px);line-height:1.85;color:var(--ink)}
+.dots{display:flex;gap:6px;margin-top:26px}
+.dot{width:14px;height:14px;border-radius:4px;background:rgba(34,54,77,.16);transition:background-color .3s var(--ease)}
+.dot.is-done{background:var(--accent)}
+.dot.is-now{background:transparent;box-shadow:inset 0 0 0 2px var(--peach)}
+.progress-meta{margin-top:12px;font-size:13px;color:var(--ink-2)}
+.stats{display:flex;flex-wrap:wrap;gap:clamp(32px,6vw,72px);margin-top:clamp(48px,7vw,80px);padding-top:2px}
+.stat b{display:block;font-family:var(--font-display);font-weight:500;font-size:clamp(28px,3vw,36px);line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{display:block;margin-top:6px;font-size:13px;color:var(--ink-2)}
+
+/* ---------- 章节 ---------- */
+.page-head{display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap}
+.page-head h1{font-size:clamp(38px,5.2vw,72px);line-height:1.12;letter-spacing:-.022em}
+.page-head .edit{margin-left:auto;margin-top:10px}
+.page-meta{margin-top:14px;font-size:14px;color:var(--ink-2)}
+.chapter-goal{font-family:var(--font-display);font-size:clamp(20px,2.2vw,25px);line-height:1.7;max-width:34em;margin-top:clamp(30px,4vw,44px)}
+.chapter-finish{margin-top:16px;font-size:15px;color:var(--ink-2);max-width:40em}
+.chapter-cta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:clamp(26px,3vw,34px)}
+.chapter-cta-hint{font-size:13.5px;color:var(--ink-2)}
+.actions{list-style:none;margin:clamp(30px,4vw,44px) 0 0;padding:0}
+.action{display:grid;grid-template-columns:8px minmax(0,1fr) auto;gap:18px;align-items:center;padding:18px;margin:0 -18px;border-radius:16px;transition:background-color .18s var(--ease),box-shadow .18s var(--ease)}
+.action:hover{background:rgba(255,255,255,.34)}
+.action .dot{width:8px;height:8px;border-radius:50%;background:var(--ink-2);opacity:.35}
+.action.is-done .dot{background:transparent;box-shadow:inset 0 0 0 2px var(--accent);opacity:.9}
+.action-body{display:block;text-align:left;min-width:0}
+.action-title{display:block;font-size:17.5px;font-weight:500;line-height:1.55}
+.action-meta{display:block;margin-top:4px;font-size:13.5px;color:var(--ink-2)}
+.action.is-done{opacity:.62}
+.action.is-done .action-title{text-decoration:none}
+.action-go{font-size:13.5px;color:var(--link);padding:8px 0 8px 12px;opacity:.85;transition:opacity .18s var(--ease)}
+.action:hover .action-go,.action:focus-within .action-go{opacity:1}
+.action-state{font-size:13px;color:var(--ink-2);padding-left:12px}
+
+.chapter-grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:clamp(40px,6vw,88px);align-items:start}
+.chapter-main{min-width:0}
+.chapter-side{position:sticky;top:96px;padding:24px;border-radius:var(--radius)}
+.chapter-side .preflight{margin-top:0}
+.chapter-side .preflight h2,.chapter-side .parking h2{font-size:17px}
+.chapter-side .parking{margin-top:30px}
+.chapter-side .checks{grid-template-columns:1fr;max-width:none}
+.chapter-side .parking-list,.chapter-side .parking-add{max-width:none}
+.add-action{margin:10px 0 0 -8px;color:var(--link);font-size:14.5px;padding:10px 8px}
+.add-action:hover{text-decoration:underline;text-underline-offset:4px}
+
+.preflight{margin-top:clamp(48px,7vw,72px)}
+.preflight h2{font-size:20px;margin-bottom:6px}
+.preflight p{font-size:13.5px;color:var(--ink-2);margin-bottom:16px}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:640px}
+.check{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.32);text-align:left;font-size:14.5px;transition:background-color .18s var(--ease)}
+.check:hover{background:rgba(255,255,255,.5)}
+.check i{width:18px;height:18px;border-radius:5px;box-shadow:inset 0 0 0 1px rgba(34,54,77,.28);flex:0 0 auto;position:relative;transition:background-color .18s var(--ease),box-shadow .18s var(--ease)}
+.check[aria-pressed="true"] i{background:var(--accent);box-shadow:none}
+.check[aria-pressed="true"] i::after{content:"";position:absolute;left:5px;top:3px;width:6px;height:10px;border-right:2px solid var(--on-accent);border-bottom:2px solid var(--on-accent);transform:rotate(40deg)}
+.check[aria-pressed="true"]{background:rgba(245,211,125,.26)}
+
+.parking{margin-top:clamp(40px,6vw,64px)}
+.parking h2{font-size:20px;margin-bottom:12px}
+.parking-list{list-style:none;padding:0;margin:0;max-width:640px}
+.parking-list li{display:flex;align-items:center;gap:14px;padding:10px 0;font-size:14.5px}
+.parking-list li span{flex:1}
+.parking-list li button{font-size:13px;color:var(--ink-2)}
+.parking-add{display:flex;gap:12px;margin-top:14px;max-width:640px;align-items:center}
+.parking-add input{flex:1;min-width:0;background:rgba(255,255,255,.42);border:1px solid rgba(255,255,255,.55);border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.6}
+.parking-add input:focus{outline:2px solid var(--link);outline-offset:1px}
+
+.page-foot{display:flex;gap:26px;margin-top:clamp(48px,7vw,72px);padding-top:8px}
+
+/* ---------- 专属：专注 ---------- */
+.page-focus{max-width:none;padding:0;min-height:100dvh;display:none}
+.page-focus.is-active{display:flex;flex-direction:column}
+.focus-top{display:flex;align-items:center;gap:20px;padding:22px clamp(20px,4vw,40px)}
+.focus-top .preset{margin-left:auto;font-size:13px;color:var(--night-ink-2);font-variant-numeric:tabular-nums}
+.focus-center{
+  margin:auto;text-align:center;width:calc(100% - 2*var(--pad));max-width:900px;
+  padding:clamp(38px,6vw,68px) clamp(22px,5vw,56px);
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.13);
+  border-radius:36px;
+  -webkit-backdrop-filter:blur(26px) saturate(1.15);
+  backdrop-filter:blur(26px) saturate(1.15);
+  box-shadow:0 40px 100px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.14);
+}
+.focus-title{font-size:clamp(24px,3.2vw,34px);line-height:1.5;font-weight:500;max-width:18em;margin:0 auto;color:var(--night-ink)}
+.focus-label{font-size:13px;color:var(--night-ink-2);margin-top:20px}
+.timer{display:flex;justify-content:center;align-items:baseline;font-family:var(--font-display);font-weight:400;
+  font-size:clamp(72px,16.5vw,168px);line-height:1;letter-spacing:.005em;margin:clamp(26px,5vw,46px) 0;color:#F8E3B0}
+.timer .d{display:inline-block;width:.6em;text-align:center;font-variant-numeric:tabular-nums}
+.timer .c{display:inline-block;width:.3em;text-align:center;opacity:.45;transform:translateY(-.06em)}
+.timer.is-paused{opacity:.72}
+.focus-actions{display:flex;align-items:center;justify-content:center;gap:26px;flex-wrap:wrap}
+.focus-note{margin-top:28px;font-size:13px;color:var(--night-ink-2)}
+.menu{position:fixed;right:clamp(20px,4vw,40px);top:76px;width:280px;
+  background:rgba(18,36,58,.58);
+  -webkit-backdrop-filter:blur(24px) saturate(1.2);
+  backdrop-filter:blur(24px) saturate(1.2);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:18px;padding:12px;
+  box-shadow:0 24px 60px rgba(0,0,0,.4);z-index:40;color:var(--night-ink)}
+.menu button{display:block;width:100%;text-align:left;padding:11px 12px;border-radius:10px;font-size:14.5px;color:var(--night-ink)}
+.menu button:hover{background:rgba(255,255,255,.08)}
+.menu .menu-label{font-size:13px;color:var(--night-ink-2);padding:4px 12px 8px}
+.menu .presets{display:flex;gap:6px;padding:0 8px 10px}
+.menu .presets button{width:auto;flex:1;text-align:center;font-size:13px;padding:7px 0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+.menu .presets button.is-on{background:var(--night-accent);color:var(--night);box-shadow:none}
+.menu .sep{height:1px;background:rgba(255,255,255,.09);margin:8px 12px}
+
+/* ---------- 收束 ---------- */
+.close-wrap{max-width:760px}
+.close-wrap h1{font-size:clamp(40px,5.2vw,72px);line-height:1.12;letter-spacing:-.02em}
+.close-sub{margin-top:14px;font-size:15px;color:var(--ink-2);max-width:34em}
+.stepper{margin-top:clamp(36px,5vw,52px);padding:clamp(24px,4vw,38px);border-radius:var(--radius);
+  background-color:var(--glass);background-image:var(--sheen);border:1px solid var(--glass-line);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.2);backdrop-filter:blur(var(--glass-blur)) saturate(1.2);
+  box-shadow:var(--glass-shadow)}
+.step-kicker{font-size:13px;color:var(--ink-2);margin-bottom:14px}
+.step-count{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums;margin-right:16px}
+.step-title{font-family:var(--font-display);font-size:clamp(24px,3vw,32px);line-height:1.5;margin-bottom:22px}
+.step-count{font-size:13px;color:var(--ink-2);font-variant-numeric:tabular-nums;margin-right:16px}
+.field{display:block;margin-bottom:20px}
+.field span{display:block;font-size:13px;color:var(--ink-2);margin-bottom:8px}
+.field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,.55);border:1px solid rgba(34,54,77,.10);border-radius:12px;padding:14px 16px;font-size:15.5px;line-height:1.7}
+.field textarea{resize:vertical;min-height:120px}
+.field select{appearance:none;background-image:none}
+.field input:focus,.field textarea:focus,.field select:focus{outline:2px solid var(--link);outline-offset:1px;border-color:transparent}
+.step-nav{display:flex;gap:26px;align-items:center;margin-top:30px}
+.step-nav .spacer{flex:1}
+.done-panel{margin-top:44px;background-color:var(--glass);background-image:var(--sheen);border:1px solid var(--glass-line);border-radius:var(--radius);padding:clamp(26px,4vw,38px);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.2);backdrop-filter:blur(var(--glass-blur)) saturate(1.2);box-shadow:var(--glass-shadow)}
+.stepper .done-panel{background:transparent;border:0;box-shadow:none;padding:0;margin-top:0;-webkit-backdrop-filter:none;backdrop-filter:none}
+.done-panel h2{font-size:24px;margin-bottom:10px}
+.done-panel p{font-size:14.5px;color:var(--ink-2)}
+.done-dates{margin-top:18px;font-size:15px;font-variant-numeric:tabular-nums}
+
+/* ---------- 复习 ---------- */
+.review-wrap{max-width:820px}
+.review-wrap h1{font-size:clamp(34px,4.4vw,52px)}
+.review-list{list-style:none;padding:8px 20px;margin:clamp(32px,5vw,48px) 0 0;border-radius:var(--radius);
+  background-color:var(--glass);background-image:var(--sheen);border:1px solid var(--glass-line);
+  -webkit-backdrop-filter:blur(var(--glass-blur)) saturate(1.2);backdrop-filter:blur(var(--glass-blur)) saturate(1.2);
+  box-shadow:var(--glass-shadow)}
+.review-list li{display:flex;align-items:center;gap:20px;padding:16px 6px;border-radius:12px;transition:background-color .18s var(--ease)}
+.review-list li:hover{background:rgba(255,255,255,.34)}
+.review-list .rv-main{flex:1;min-width:0}
+.review-list strong{display:block;font-size:17px;font-weight:500}
+.review-list small{display:block;margin-top:4px;font-size:13px;color:var(--ink-2)}
+.review-list button{font-size:13.5px;color:var(--link);white-space:nowrap}
+.empty-state{margin-top:44px;font-size:15px;color:var(--ink-2)}
+.question-text{font-family:var(--font-display);font-size:clamp(22px,2.6vw,28px);line-height:1.6;margin-bottom:22px}
+.review-note{margin-top:20px;font-size:13px;color:var(--ink-2)}
+.rate-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.rate-row .primary{min-height:46px;padding:0 22px}
+
+/* ---------- 弹层 ---------- */
+dialog{border:0;padding:0;background:transparent;max-width:min(580px,calc(100vw - 32px));width:100%;margin:auto}
+dialog::backdrop{background:rgba(15,30,48,.38);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.sheet{
+  background-color:rgba(255,250,242,.8);
+  background-image:linear-gradient(135deg, rgba(255,255,255,.42), rgba(255,255,255,0) 52%);
+  -webkit-backdrop-filter:blur(30px) saturate(1.25);
+  backdrop-filter:blur(30px) saturate(1.25);
+  border:1px solid rgba(255,255,255,.7);
+  border-radius:26px;padding:clamp(24px,4vw,38px);
+  box-shadow:0 30px 90px rgba(15,40,65,.32), inset 0 1px 0 rgba(255,255,255,.8);
+  color:var(--ink);max-height:86dvh;overflow:auto;
+}
+.sheet h2{font-size:clamp(24px,3vw,30px);line-height:1.35}
+.sheet-hint{margin-top:10px;font-size:13.5px;color:var(--ink-2)}
+.sheet-body{margin-top:24px}
+.sheet-actions{display:flex;justify-content:flex-end;align-items:center;gap:22px;margin-top:30px}
+.sheet .field:last-child{margin-bottom:0}
+.seg-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.seg-row .seg-name{width:64px;flex:0 0 auto;font-size:13px;color:var(--ink-2)}
+.seg{padding:8px 16px;border-radius:999px;font-size:13.5px;color:var(--ink-2);background:rgba(255,255,255,.34);border:1px solid rgba(255,255,255,.5);transition:all .16s var(--ease)}
+.seg.is-on{background:var(--accent);color:var(--on-accent);border-color:transparent}
+.seg:hover{color:var(--ink)}
+.seg.is-on:hover{color:var(--on-accent)}
+.seg-row select{background:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:8px 14px;font-size:14px;color:var(--ink);appearance:none}
+
+/* ---------- 提示 ---------- */
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,12px);background:rgba(18,36,58,.82);color:var(--night-ink);
+  -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);
+  padding:11px 20px;border-radius:999px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .22s var(--ease),transform .22s var(--ease);z-index:60;max-width:calc(100vw - 32px)}
+.toast.is-on{opacity:.96;transform:translate(-50%,0)}
+body[data-route="focus"] .toast{background:var(--night-accent);color:var(--night)}
+
+/* ---------- 页脚 ---------- */
+.foot{max-width:1100px;margin:0 auto;padding:0 var(--pad) 40px;font-size:13px;color:var(--ink-2)}
+body[data-route="focus"] .top,body[data-route="focus"] .foot{display:none}
+
+/* ---------- 移动 ---------- */
+@media (max-width:900px){
+  .today{grid-template-columns:1fr}
+  .today-aside{margin-top:8px;order:2}
+  .today h1{font-size:clamp(38px,9vw,52px)}
+  .checks{grid-template-columns:1fr}
+  .chapter-grid{grid-template-columns:1fr}
+  .chapter-side{position:static}
+  .chapter-side .preflight{margin-top:clamp(44px,7vw,64px)}
+  .top{flex-wrap:wrap;gap:12px}
+  .nav{gap:20px}
+  .page{padding-bottom:80px}
+}
+@media (max-width:640px){
+  body{font-size:15.5px}
+  .top{padding:0 20px}
+  .top-inner{padding:14px 0}
+  .brand{font-size:18px}
+  .nav{font-size:13.5px;gap:18px}
+  .top-right .save-note{display:none}
+  .top-date{display:none}
+  .today-actions{gap:16px}
+  .primary{min-height:50px;padding:0 24px}
+  .action{grid-template-columns:8px minmax(0,1fr);gap:12px;padding:16px 12px}
+  .action-go,.action-state{grid-column:2;justify-self:start;opacity:1;padding-left:0}
+  .stats{gap:28px}
+  .focus-top .preset{display:none}
+  .focus-center{width:calc(100% - 32px);padding:34px 20px;border-radius:28px}
+  .timer{font-size:clamp(64px,20vw,96px)}
+  .focus-actions{gap:18px;flex-direction:column}
+  .focus-actions .textbtn{min-height:40px}
+  .menu{left:20px;right:20px;width:auto}
+  .step-nav{flex-wrap:wrap}
+  :root{--glass-blur:14px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-delay:0ms !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+}
+
+@media print{
+  body{background:#fff;color:#000}
+  .top,.foot,.page-focus,.toast,dialog{display:none !important}
+  .page{display:none !important;padding:0}
+  .page.is-active{display:block !important}
+  .glass,.stepper,.review-list,.sheet,.done-panel{background:#fff !important;box-shadow:none !important;-webkit-backdrop-filter:none !important;backdrop-filter:none !important;border:0 !important}
+  .action-go,.action-state{display:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="#/today">一章书</a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#/today" data-nav="today">今日</a>
+      <a href="#/chapter" data-nav="chapter">章节</a>
+      <a href="#/review" data-nav="review" data-view="review">复习</a>
+    </nav>
+    <div class="top-right">
+      <span class="top-date" id="todayDate"></span>
+      <span class="save-note" id="saveNote">已保存</span>
+      <button class="textbtn" id="appearanceBtn">外观</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <!-- 今日 -->
+  <section class="page page-today" data-page="today">
+    <div class="today">
+      <div>
+        <h1 id="todayTitle"></h1>
+        <p class="today-lede" id="todayLede"></p>
+        <div class="today-actions">
+          <button class="primary" id="startRun">开始专注</button>
+          <span class="today-hint" id="todayHint"></span>
+          <a class="textbtn" href="#/chapter">看这一章的任务 →</a>
+        </div>
+      </div>
+      <aside class="today-aside glass" aria-label="上次停下的地方">
+        <p class="aside-label">上次停在这里</p>
+        <p class="aside-capsule" id="lastCapsule"></p>
+        <div class="dots" id="progressDots"></div>
+        <p class="progress-meta" id="progressMeta"></p>
+      </aside>
+    </div>
+    <div class="stats" id="todayStats"></div>
+  </section>
+
+  <!-- 章节 -->
+  <section class="page page-chapter" data-page="chapter">
+    <div class="chapter-grid">
+      <div class="chapter-main">
+        <div class="page-head">
+          <div>
+            <h1 id="chapterTitle"></h1>
+            <p class="page-meta" id="chapterMeta"></p>
+          </div>
+          <button class="textbtn edit" id="editChapter">编辑</button>
+        </div>
+        <p class="chapter-goal" id="chapterGoal"></p>
+        <p class="chapter-finish" id="chapterFinish"></p>
+        <div class="chapter-cta">
+          <button class="primary" id="chapterStart">继续</button>
+          <span class="chapter-cta-hint" id="chapterCtaHint"></span>
+        </div>
+        <ol class="actions" id="actionList"></ol>
+        <button class="add-action" id="addAction">＋ 加一个动作</button>
+      </div>
+
+      <aside class="chapter-side glass">
+        <section class="preflight">
+          <h2>开工包</h2>
+          <p>开始前把这四件事做完，手就不会被别的东西拉走。</p>
+          <div class="checks" id="checks"></div>
+        </section>
+
+        <section class="parking">
+          <h2>停车区</h2>
+          <ul class="parking-list" id="parkingList"></ul>
+          <div class="parking-add">
+            <input id="parkInput" placeholder="先记下来" aria-label="停车区内容">
+            <button class="textbtn" id="addPark">放进去</button>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="page-foot">
+      <button class="textbtn" id="exportBtn">导出这一章</button>
+      <button class="textbtn" id="printBtn">打印</button>
+    </footer>
+  </section>
+
+  <!-- 专注 -->
+  <section class="page page-focus" data-page="focus" aria-label="专注">
+    <div class="focus-top">
+      <button class="textbtn light" id="leaveFocus">离开</button>
+      <span class="preset" id="focusPreset"></span>
+      <button class="textbtn light" id="menuBtn" aria-expanded="false" aria-controls="focusMenu">更多</button>
+    </div>
+    <div class="focus-center">
+      <h1 class="focus-title" id="focusTitle"></h1>
+      <p class="focus-label" id="focusLabel"></p>
+      <div class="timer" id="timer" role="timer" aria-live="off"></div>
+      <div class="focus-actions">
+        <button class="primary light" id="doneAction">完成这个动作</button>
+        <button class="textbtn light" id="toggleTimer">开始</button>
+      </div>
+      <p class="focus-note" id="focusNote">完成后留一句上下文，给下一次的自己。</p>
+    </div>
+    <div class="menu" id="focusMenu" hidden>
+      <p class="menu-label">这一轮时长</p>
+      <div class="presets" id="presetRow">
+        <button type="button" data-preset="10">10</button>
+        <button type="button" data-preset="25">25</button>
+        <button type="button" data-preset="45">45</button>
+        <button type="button" data-preset="90">90</button>
+      </div>
+      <div class="sep"></div>
+      <button type="button" id="menuResearch">查资料（10 分钟）</button>
+      <button type="button" id="menuSwitch">切换动作</button>
+      <button type="button" id="menuPark">放进停车区</button>
+      <button type="button" id="menuDistract">走神 / 被打断</button>
+    </div>
+  </section>
+
+  <!-- 收束 -->
+  <section class="page page-close" data-page="close">
+    <div class="close-wrap">
+      <h1>合上书，先回忆。</h1>
+      <p class="close-sub">不要重读。答不上来的地方，才是下一次复习的入口。</p>
+      <div class="stepper" id="closeStepper"></div>
+    </div>
+  </section>
+
+  <!-- 复习 -->
+  <section class="page page-review" data-page="review">
+    <div class="review-wrap" id="reviewMain"></div>
+  </section>
+</main>
+
+<footer class="foot">一章书 · 数据只存在这台电脑的浏览器里</footer>
+
+<dialog id="sheet" aria-labelledby="dlgTitle"></dialog>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+
+var KEY = "diceng-study-desk-v1";
+var HIST = "diceng-study-history-v1";
+var UIKEY = "study-desk-ui-v1";
+
+function $(sel, root){ return (root||document).querySelector(sel); }
+function $$(sel, root){ return Array.prototype.slice.call((root||document).querySelectorAll(sel)); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+function clone(o){ return JSON.parse(JSON.stringify(o)); }
+function uid(){ return "a" + Math.random().toString(36).slice(2,9); }
+function pad(n){ return String(n).padStart(2,"0"); }
+function todayStr(){ var d=new Date(); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function addDays(n){ var d=new Date(); d.setDate(d.getDate()+n); return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+function fmtDate(iso){ if(!iso) return ""; var p=iso.split("-"); return p[1]? (Number(p[1])+" 月 "+Number(p[2])+" 日") : iso; }
+
+var DEFAULT = {
+  book:"", chapter:"",
+  goal:"读完这一章，能用自己的话讲出：它在回答什么、怎么论证、哪里不成立。",
+  finish:"200 字复述 + 3 个自测问题 + 1 张判断卡",
+  actions:[
+    {id:uid(),title:"预读：看标题、小节、图表、首尾段",output:"一句话：这一章在回答什么",need:"够",minutes:10,status:"todo",capsule:""},
+    {id:uid(),title:"提问：写 3 个我想让这一章回答的问题",output:"3 个问题",need:"够",minutes:5,status:"todo",capsule:""},
+    {id:uid(),title:"扫读结构：列出小节与论证顺序",output:"一张结构清单",need:"够",minutes:10,status:"todo",capsule:""},
+    {id:uid(),title:"精读：读核心段，标主张/证据/例子/转折",output:"3 条摘记（不是抄）",need:"够",minutes:25,status:"todo",capsule:""},
+    {id:uid(),title:"复述：合上书，用自己的话讲一遍",output:"200 字复述",need:"够",minutes:10,status:"todo",capsule:""},
+    {id:uid(),title:"检索：写 3 个自测问题并合书回答",output:"3 问 3 答",need:"够",minutes:10,status:"todo",capsule:""},
+    {id:uid(),title:"判断：和我的旧看法/另一本书撞一下",output:"判断卡：关系/证据/置信/可推翻",need:"够",minutes:15,status:"todo",capsule:""}
+  ],
+  parking:[],
+  checks:{book:false,notes:false,phone:false,notif:false},
+  currentId:null,
+  retrieval:{q1:"",a1:"",q2:"",a2:"",q3:"",a3:""},
+  explanation:"",confidenceBefore:"",confidenceAfter:"",cardDraft:"",
+  research:[],
+  metrics:{startedAt:null,researchSeconds:0,switches:0,distractions:0,completed:0}
+};
+var CHECK_LABELS = {book:"书 / PDF 已打开",notes:"纸笔或笔记就位",phone:"手机放到拿不到的地方",notif:"通知、聊天、无关标签页已关"};
+
+function loadState(){
+  var base = clone(DEFAULT);
+  base.currentId = base.actions[0].id;
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(!raw) return base;
+    var s = JSON.parse(raw);
+    var d = clone(DEFAULT);
+    Object.keys(d).forEach(function(k){ if(s[k]!==undefined) d[k]=s[k]; });
+    if(!d.actions || !d.actions.length) d.actions = clone(DEFAULT.actions);
+    if(!d.checks) d.checks = {book:false,notes:false,phone:false,notif:false};
+    if(!d.metrics) d.metrics = {startedAt:null,researchSeconds:0,switches:0,distractions:0,completed:0};
+    if(!d.currentId || !d.actions.some(function(a){return a.id===d.currentId;})) d.currentId = d.actions[0].id;
+    return d;
+  }catch(e){ return base; }
+}
+function loadHistory(){ try{ return JSON.parse(localStorage.getItem(HIST)||"[]"); }catch(e){ return []; } }
+function saveHistory(){ try{ localStorage.setItem(HIST, JSON.stringify(history)); }catch(e){} }
+function loadUi(){
+  var d = {theme:"sky", density:"cozy", display:"serif"};
+  try{ var s = JSON.parse(localStorage.getItem(UIKEY)||"{}"); Object.keys(d).forEach(function(k){ if(s[k]) d[k]=s[k]; }); }catch(e){}
+  if(["sky","cream","mist"].indexOf(d.theme)<0) d.theme = "sky";
+  if(["cozy","compact"].indexOf(d.density)<0) d.density = "cozy";
+  if(["serif","sans"].indexOf(d.display)<0) d.display = "serif";
+  return d;
+}
+
+var state = loadState();
+var history = loadHistory();
+var ui = loadUi();
+var route = "today";
+var closeStep = 0;
+var review = null;
+var toastTimer = null;
+var saveTimer = null;
+
+var timer = {total:25*60, remaining:25*60, running:false, handle:null, actionId:null, timeUp:false, focusOpen:false};
+var researchStartedAt = 0;
+var researchWasRunning = false;
+
+/* ---------- 保存与事件 ---------- */
+function showSaved(){
+  var el = $("#saveNote"); if(!el) return;
+  el.textContent = "已保存";
+  el.classList.add("is-on");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){ el.classList.remove("is-on"); }, 1400);
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); showSaved(); }catch(e){}
+}
+function saveUi(){ try{ localStorage.setItem(UIKEY, JSON.stringify(ui)); }catch(e){} }
+function applyUi(){
+  document.documentElement.dataset.theme = ui.theme;
+  document.documentElement.dataset.density = ui.density;
+  document.documentElement.dataset.display = ui.display;
+}
+function emit(type, payload){
+  try{
+    if(window.RobotBridge && typeof window.RobotBridge.postEvent === "function"){
+      window.RobotBridge.postEvent(type, payload||{});
+      return;
+    }
+    if(/^https?:/.test(location.protocol)){
+      fetch("/api/event", {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({type:type,payload:payload||{}})}).catch(function(){});
+    }
+  }catch(e){}
+}
+function toast(msg){
+  var el = $("#toast"); if(!el) return;
+  el.textContent = msg;
+  el.classList.add("is-on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.classList.remove("is-on"); }, 2200);
+}
+
+/* ---------- 数据查询 ---------- */
+function current(){
+  var a = state.actions.find(function(x){ return x.id===state.currentId; });
+  if(a && a.status!=="done") return a;
+  return state.actions.find(function(x){ return x.status!=="done"; }) || null;
+}
+function nextTodo(afterId){
+  var i = state.actions.findIndex(function(a){ return a.id===afterId; });
+  for(var j=i+1;j<state.actions.length;j++){ if(state.actions[j].status!=="done") return state.actions[j]; }
+  return state.actions.find(function(a){ return a.status!=="done"; }) || null;
+}
+function totalMin(){ return state.actions.reduce(function(s,a){ return s+(Number(a.minutes)||0); },0); }
+function doneCount(){ return state.actions.filter(function(a){ return a.status==="done"; }).length; }
+function dueRecords(){ return history.filter(function(h){ return h.nextDue && h.nextDue<=todayStr(); }); }
+function lastCapsule(){
+  for(var i=state.actions.length-1;i>=0;i--){ if(state.actions[i].capsule) return state.actions[i].capsule; }
+  return "";
+}
+function shortTitle(t){
+  var s = String(t||"");
+  var i = s.indexOf("：");
+  if(i>0) s = s.slice(0,i);
+  return s.length>8 ? s.slice(0,8)+"…" : s;
+}
+
+/* ---------- 时长 ---------- */
+function timerFor(a){
+  if(!a) return 25*60;
+  var m = Number(a.minutes)||25;
+  return Math.max(5, Math.min(90, m))*60;
+}
+function stopTick(){ if(timer.handle){ clearInterval(timer.handle); timer.handle=null; } }
+function startTimer(){
+  if(timer.running) return;
+  if(timer.timeUp){ timer.timeUp = false; timer.remaining = 5*60; timer.total = Math.max(timer.total, 5*60); }
+  timer.running = true;
+  stopTick();
+  timer.handle = setInterval(tick, 1000);
+  if(!timer.focusOpen){ timer.focusOpen = true; emit("focus_start", {chapter: state.chapter}); }
+  renderTimer(); renderFocusChrome();
+}
+function pauseTimer(){
+  if(!timer.running) return;
+  timer.running = false;
+  stopTick();
+  if(timer.focusOpen){ timer.focusOpen = false; emit("focus_end", {chapter: state.chapter}); }
+  renderTimer(); renderFocusChrome();
+}
+function tick(){
+  if(!timer.running) return;
+  timer.remaining--;
+  if(timer.remaining<=0){
+    timer.remaining = 0;
+    timer.running = false;
+    timer.timeUp = true;
+    stopTick();
+    if(timer.focusOpen){ timer.focusOpen = false; emit("focus_end", {chapter: state.chapter}); }
+    toast("时间到了。完成这个动作，或者再延 5 分钟。");
+  }
+  renderTimer(); renderFocusChrome();
+}
+function renderTimer(){
+  var el = $("#timer"); if(!el) return;
+  var sec = Math.max(0, timer.remaining);
+  var m = Math.floor(sec/60), s = sec%60;
+  var html = "";
+  pad(m).split("").forEach(function(d){ html += '<span class="d">'+d+"</span>"; });
+  html += '<span class="c">:</span>';
+  pad(s).split("").forEach(function(d){ html += '<span class="d">'+d+"</span>"; });
+  el.innerHTML = html;
+  el.classList.toggle("is-paused", !timer.running && timer.remaining>0 && !timer.timeUp);
+  el.setAttribute("aria-label", "剩余 " + pad(m) + " 分 " + pad(s) + " 秒");
+}
+
+/* ---------- 弹层 ---------- */
+var dlg = $("#sheet");
+var sheetConfirm = null;
+function openSheet(opts){
+  sheetConfirm = opts.onConfirm || null;
+  dlg.innerHTML = '<div class="sheet"><h2 id="dlgTitle">'+esc(opts.title)+"</h2>"+
+    (opts.hint ? '<p class="sheet-hint">'+esc(opts.hint)+"</p>" : "")+
+    '<div class="sheet-body">'+(opts.body||"")+"</div>"+
+    '<div class="sheet-actions"><button type="button" class="textbtn" data-sheet-close>'+esc(opts.cancel||"取消")+
+    '</button><button type="button" class="primary '+(opts.danger?"danger":"")+'" data-sheet-confirm>'+esc(opts.confirm||"保存")+"</button></div></div>";
+  if(!dlg.open) dlg.showModal();
+  var first = dlg.querySelector("input,textarea,select");
+  if(first) setTimeout(function(){ first.focus(); }, 30);
+}
+dlg.addEventListener("click", function(e){
+  if(e.target===dlg){ dlg.close(); return; }
+  if(e.target.closest("[data-sheet-close]")){ dlg.close(); return; }
+  var seg = e.target.closest("[data-ui]");
+  if(seg){
+    var k = seg.getAttribute("data-ui"), v = seg.getAttribute("data-val");
+    ui[k]=v; applyUi(); saveUi();
+    $$("[data-ui='"+k+"']", dlg).forEach(function(b){ b.classList.toggle("is-on", b===seg); });
+    return;
+  }
+  if(e.target.closest("[data-sheet-confirm]")){
+    var ok = true;
+    if(sheetConfirm){ try{ ok = sheetConfirm(dlg); }catch(err){ ok = false; } }
+    if(ok!==false) dlg.close();
+  }
+});
+dlg.addEventListener("close", function(){ sheetConfirm = null; });
+
+/* ---------- 路由 ---------- */
+var ROUTES = ["today","chapter","focus","close","review"];
+function routeName(){
+  var m = (location.hash||"").match(/^#\/([a-z]+)/);
+  return m && ROUTES.indexOf(m[1])>=0 ? m[1] : "today";
+}
+function go(name){ if(routeName()===name){ render(); } else { location.hash = "#/"+name; } }
+function onRoute(){
+  var r = routeName();
+  if(r==="focus" && !current()){ location.replace("#/chapter"); return; }
+  if(r!=="focus" && timer.running) pauseTimer();
+  route = r;
+  document.body.dataset.route = r;
+  ROUTES.forEach(function(n){
+    var page = document.querySelector('[data-page="'+n+'"]');
+    if(page){ page.classList.toggle("is-active", n===r); }
+  });
+  $$("[data-nav]").forEach(function(a){
+    if(a.getAttribute("data-nav")===r) a.setAttribute("aria-current","page");
+    else a.removeAttribute("aria-current");
+  });
+  var menu = $("#focusMenu"); if(menu) menu.hidden = true;
+  render();
+  window.scrollTo(0,0);
+}
+
+/* ---------- 渲染：今日 ---------- */
+function renderToday(){
+  var d = new Date();
+  var WEEK = ["周日","周一","周二","周三","周四","周五","周六"];
+  $("#todayDate").textContent = (d.getMonth()+1)+" 月 "+d.getDate()+" 日 · "+WEEK[d.getDay()];
+  var title = "";
+  var lede = [];
+  if(state.chapter){
+    title = state.chapter;
+    if(state.book) lede.push("《"+state.book+"》");
+  }else if(state.book){
+    title = state.book;
+  }else{
+    title = "把一章书，读成自己的地图。";
+  }
+  $("#todayTitle").textContent = title;
+  lede.push(state.goal || state.finish || "先写下书名和章节，再把这一章拆成 5–9 个动作。");
+  $("#todayLede").textContent = lede.join(" · ");
+  var a = current();
+  $("#todayHint").textContent = a ? ("当前：" + (a.title.split("：")[0]||a.title) + " · " + (a.minutes||25) + " 分钟") : "这一章的动作都完成了";
+  $("#startRun").textContent = a ? "开始专注" : "去收束";
+  var cap = lastCapsule();
+  $("#lastCapsule").textContent = cap || "还没有留下上下文。完成第一个动作时，写一句给自己。";
+  var dots = state.actions.map(function(x,i){
+    var cls = x.status==="done" ? "is-done" : (a && x.id===a.id ? "is-now" : "");
+    return '<span class="dot '+cls+'" title="'+esc(x.title||"")+'"></span>';
+  }).join("");
+  $("#progressDots").innerHTML = dots;
+  $("#progressMeta").textContent = doneCount()+" / "+state.actions.length+" 个动作完成 · 预计 "+totalMin()+" 分钟";
+  var due = dueRecords().length;
+  $("#todayStats").innerHTML =
+    '<div class="stat"><b>'+doneCount()+" / "+state.actions.length+'</b><span>动作完成</span></div>'+
+    '<div class="stat"><b>'+(Number(state.metrics.distractions)||0)+'</b><span>走神 / 被打断</span></div>'+
+    '<div class="stat"><b>'+due+'</b><span>复习到期</span></div>';
+}
+
+/* ---------- 渲染：章节 ---------- */
+function renderChapter(){
+  $("#chapterTitle").textContent = state.chapter || "这一章还没有名字";
+  $("#chapterMeta").textContent = state.actions.length+" 个动作 · 预计 "+totalMin()+" 分钟 · 已完成 "+doneCount();
+  $("#chapterGoal").textContent = state.goal || "这一章要交付什么？点右上角「编辑」补上。";
+  $("#chapterFinish").textContent = state.finish ? "完成标准："+state.finish : "完成标准还没有写。";
+  var cur = current();
+  $("#chapterStart").textContent = cur ? "继续：" + shortTitle(cur.title) : "去收束";
+  $("#chapterCtaHint").textContent = cur ? ((Number(cur.minutes)||25)+" 分钟"+(cur.output?" · "+cur.output:"")) : "这一章的动作都完成了";
+  $("#actionList").innerHTML = state.actions.map(function(a){
+    var done = a.status==="done";
+    return '<li class="action '+(done?"is-done":"")+'" data-id="'+esc(a.id)+'">'+
+      '<span class="dot" aria-hidden="true"></span>'+
+      '<button class="action-body" data-act="editAction" data-id="'+esc(a.id)+'">'+
+        '<span class="action-title">'+esc(a.title||"未命名动作")+"</span>"+
+        '<span class="action-meta">'+esc(a.output||"还没有产出")+" · "+(Number(a.minutes)||0)+" 分钟"+(a.need==="缺"?" · 缺信息":"")+"</span>"+
+      "</button>"+
+      (done ? '<span class="action-state">已完成</span>' : '<button class="action-go" data-act="go" data-id="'+esc(a.id)+'">开始</button>')+
+    "</li>";
+  }).join("");
+  $("#checks").innerHTML = Object.keys(CHECK_LABELS).map(function(k){
+    return '<button class="check" data-act="check" data-key="'+k+'" aria-pressed="'+(!!state.checks[k])+'"><i aria-hidden="true"></i>'+esc(CHECK_LABELS[k])+"</button>";
+  }).join("");
+  $("#parkingList").innerHTML = state.parking.map(function(p){
+    return '<li><span>'+esc(p.text)+'</span><button data-act="parkDel" data-id="'+esc(p.id)+'">移走</button></li>';
+  }).join("") || '<li><span style="color:var(--ink-2)">还没有。想到别的事，先放这里。</span></li>';
+}
+
+/* ---------- 渲染：专注 ---------- */
+function renderFocus(){
+  var a = current();
+  if(!a) return;
+  if(timer.actionId!==a.id){
+    pauseTimer();
+    timer.actionId = a.id;
+    timer.total = timerFor(a);
+    timer.remaining = timer.total;
+    timer.timeUp = false;
+  }
+  $("#focusTitle").textContent = a.title || "未命名动作";
+  var remaining = state.actions.filter(function(x){ return x.status!=="done"; }).length;
+  $("#focusLabel").textContent = remaining+" 个动作待完成"+(a.output ? " · "+(a.output.length>18?a.output.slice(0,18)+"…":a.output) : "");
+  var m = Math.round(timer.total/60);
+  $("#focusPreset").textContent = m+" 分钟";
+  renderTimer();
+  renderFocusChrome();
+  $$("#presetRow [data-preset]").forEach(function(b){
+    b.classList.toggle("is-on", Number(b.getAttribute("data-preset"))===m);
+  });
+}
+function renderFocusChrome(){
+  var a = current(); if(!a) return;
+  var toggle = $("#toggleTimer");
+  if(timer.timeUp){
+    toggle.textContent = "再延 5 分钟";
+  }else if(timer.running){
+    toggle.textContent = "暂停";
+  }else{
+    toggle.textContent = timer.remaining<timer.total ? "继续" : "开始";
+  }
+  var note = $("#focusNote");
+  if(timer.timeUp) note.textContent = "时间到了。完成这个动作，或者再延 5 分钟。";
+  else if(timer.running) note.textContent = "把手机放到看不见的地方，只做这一件事。";
+  else if(timer.remaining<timer.total) note.textContent = "已暂停。回来时从刚才的地方继续。";
+  else note.textContent = "完成后留一句上下文，给下一次的自己。";
+  var menu = $("#focusMenu");
+  if(menu && !menu.hidden) menu.hidden = false;
+}
+
+/* ---------- 渲染：收束 ---------- */
+function renderClose(){
+  var box = $("#closeStepper");
+  var steps = 5;
+  if(closeStep>=steps){
+    box.innerHTML = '<div class="done-panel"><h2>这一章收束了。</h2>'+
+      '<p>检索问题、自我解释和判断卡已经写进本机记录。下次复习会自动排进队列。</p>'+
+      '<p class="done-dates" id="doneDates">'+esc(lastFinishDates())+"</p>"+
+      '<div class="step-nav"><button class="primary" data-act="goToday">回到今日</button>'+
+      '<button class="textbtn" data-act="goReview">去看复习队列</button></div></div>';
+    return;
+  }
+  box.innerHTML = renderCloseStep(closeStep);
+}
+function lastFinishDates(){
+  var h = history[history.length-1];
+  if(!h || !h.reviewDates) return "下次复习：明天";
+  return "下次复习："+h.reviewDates.map(fmtDate).join(" · ");
+}
+function renderCloseStep(step){
+  if(step<3){
+    var n = step+1;
+    var q = state.retrieval["q"+n]||"", a = state.retrieval["a"+n]||"";
+    return '<p class="step-title">写一个你答不上来、但应该答得上来的问题。</p>'+
+      '<label class="field"><span>自测问题</span><input data-field="q'+n+'" value="'+esc(q)+'" placeholder="例：米提斯为什么无法被国家的规划看见？"></label>'+
+      '<label class="field"><span>合书回答</span><textarea data-field="a'+n+'" rows="4" placeholder="先写你记得的，不回去翻。">'+esc(a)+"</textarea></label>"+
+      '<div class="step-nav"><button class="textbtn" data-act="step" data-dir="-1" '+(step===0?"disabled style=\"opacity:.35\"":"")+'>上一题</button>'+
+      '<span class="spacer"></span><span class="step-count">'+n+' / 3</span>'+
+      '<button class="primary" data-act="step" data-dir="1">下一题</button></div>';
+  }
+  if(step===3){
+    return '<p class="step-title">为什么这一步成立？条件变了还成立吗？</p>'+
+      '<label class="field"><span>不要复述，写因果和边界</span><textarea data-field="explanation" rows="6">'+esc(state.explanation||"")+"</textarea></label>"+
+      '<div class="step-nav"><button class="textbtn" data-act="step" data-dir="-1">上一题</button><span class="spacer"></span>'+
+      '<button class="primary" data-act="step" data-dir="1">下一步</button></div>';
+  }
+  return '<p class="step-title">这一章，最后留下什么判断？</p>'+
+    '<div class="seg-row"><span class="seg-name">开始前</span><select class="seg" data-field="confidenceBefore" style="padding:8px 12px">'+options(state.confidenceBefore)+"</select></div>"+
+    '<div class="seg-row"><span class="seg-name">现在</span><select class="seg" data-field="confidenceAfter" style="padding:8px 12px">'+options(state.confidenceAfter)+"</select></div>"+
+    '<label class="field"><span>判断卡草稿：主张 / 证据 / 置信 / 什么能推翻</span><textarea data-field="cardDraft" rows="5">'+esc(state.cardDraft||"")+"</textarea></label>"+
+    '<div class="step-nav"><button class="textbtn" data-act="step" data-dir="-1">上一步</button><span class="spacer"></span>'+
+    '<button class="primary" data-act="finishClose">完成这次学习</button></div>';
+}
+function options(cur){
+  var out = '<option value="">选</option>';
+  for(var i=0;i<=10;i++){ out += '<option value="'+i+'" '+(String(cur)===String(i)?"selected":"")+">"+i+"</option>"; }
+  return out;
+}
+
+/* ---------- 渲染：复习 ---------- */
+function renderReview(){
+  var box = $("#reviewMain");
+  if(review){
+    var rec = history.find(function(h){ return h.id===review.id; });
+    if(!rec){ review=null; renderReview(); return; }
+    var qs = (rec.questions||[]).filter(function(q){ return q && q.trim(); });
+    if(!qs.length){ qs = ["（这次没有写检索问题）"]; }
+    if(review.idx>=qs.length){
+      box.innerHTML = '<h1>这次回忆得怎么样？</h1>'+
+        '<p class="close-sub">凭刚才的感觉选一个，下一次的间隔会跟着变。</p>'+
+        '<div class="rate-row"><button class="primary" data-act="rate" data-rate="forgot">忘了</button>'+
+        '<button class="textbtn" data-act="rate" data-rate="fuzzy">模糊</button>'+
+        '<button class="textbtn" data-act="rate" data-rate="remembered">记得</button></div>';
+      return;
+    }
+    box.innerHTML = '<p class="step-kicker">'+(rec.chapter||rec.book||"复习")+" · 问题 "+(review.idx+1)+" / "+qs.length+"</p>"+
+      '<p class="question-text">'+esc(qs[review.idx])+"</p>"+
+      '<label class="field"><span>凭记忆回答</span><textarea id="reviewAnswer" rows="5" placeholder="先写你记得的。"></textarea></label>'+
+      '<div class="step-nav"><button class="textbtn" data-act="reviewExit">先不复习</button><span class="spacer"></span>'+
+      '<button class="primary" data-act="reviewNext">'+(review.idx+1>=qs.length?"回答完了":"下一题")+"</button></div>";
+    return;
+  }
+  var due = dueRecords();
+  var recent = history.slice().sort(function(a,b){ return String(b.date||"").localeCompare(String(a.date||"")); }).slice(0,4);
+  var recentHtml = "";
+  if(recent.length){
+    recentHtml = '<h2 style="font-size:20px;margin-top:clamp(44px,6vw,64px)">最近的收束</h2><ul class="review-list">'+
+      recent.map(function(h){
+        var qn = (h.questions||[]).filter(function(q){ return q && q.trim(); }).length;
+        return '<li><div class="rv-main"><strong>'+esc(h.chapter||h.book||"未命名")+"</strong>"+
+          "<small>"+fmtDate(h.date)+" 收束 · "+qn+" 个问题 · 下次 "+fmtDate(h.nextDue)+"</small></div></li>";
+      }).join("")+"</ul>";
+  }
+  if(!due.length){
+    box.innerHTML = '<h1>复习</h1><p class="close-sub">今天没有到期复习。完成一次收束后，这里会按 1 / 3 / 7 / 14 天排进队列。</p>'+
+      '<p class="empty-state"><a class="linkbtn" href="#/today">回到今日</a></p>'+recentHtml;
+    return;
+  }
+  box.innerHTML = '<h1>复习</h1><p class="close-sub">到期先回忆，不先重读。回忆失败就缩短间隔，回忆成功就拉长。</p>'+
+    '<ul class="review-list">'+due.map(function(h){
+      var qn = (h.questions||[]).filter(function(q){ return q && q.trim(); }).length;
+      return '<li><div class="rv-main"><strong>'+esc(h.chapter||h.book||"未命名")+"</strong>"+
+        "<small>上次 "+fmtDate(h.date)+" · 到期 "+fmtDate(h.nextDue)+" · "+qn+" 个问题</small></div>"+
+        '<button data-act="reviewStart" data-id="'+esc(h.id)+'">开始复习</button></li>';
+    }).join("")+"</ul>"+recentHtml;
+}
+
+/* ---------- 全局渲染 ---------- */
+function render(){
+  renderToday(); renderChapter();
+  if(route==="focus") renderFocus();
+  if(route==="close") renderClose();
+  if(route==="review") renderReview();
+}
+
+/* ---------- 动作 ---------- */
+function startAction(id){
+  var a = state.actions.find(function(x){ return x.id===id; });
+  if(!a) return;
+  state.currentId = a.id; save();
+  if(route!=="focus") go("focus"); else { renderFocus(); render(); }
+}
+function finishAction(capsule){
+  var a = current(); if(!a) return;
+  pauseTimer();
+  a.capsule = (capsule||"").trim();
+  a.status = "done";
+  state.metrics.completed = (Number(state.metrics.completed)||0)+1;
+  var n = nextTodo(a.id);
+  state.currentId = n ? n.id : null;
+  save();
+  if(n){
+    timer.actionId = n.id;
+    timer.total = timerFor(n);
+    timer.remaining = timer.total;
+    timer.timeUp = false;
+    toast("完成。下一步：" + (n.title.length>16?n.title.slice(0,16)+"…":n.title));
+    render();
+  }else{
+    timer.remaining = 0;
+    go("close");
+  }
+}
+function addDistract(){
+  state.metrics.distractions = (Number(state.metrics.distractions)||0)+1;
+  save(); renderToday(); toast("已记下，回来继续。");
+}
+function addParking(text){
+  var v = (text||"").trim(); if(!v) return false;
+  state.parking.push({id:uid(), text:v}); save(); renderChapter(); toast("已放进停车区。");
+  return true;
+}
+function addResearch(payload){
+  payload = payload || {};
+  var q=(payload.question||"").trim(), s=(payload.source||"").trim(), a=(payload.answer||"").trim();
+  if(!q && !s && !a) return;
+  state.research.push({q:q, source:s, a:a, at:new Date().toISOString()});
+  if(researchStartedAt){ state.metrics.researchSeconds = (Number(state.metrics.researchSeconds)||0) + Math.round((Date.now()-researchStartedAt)/1000); researchStartedAt = 0; }
+  save(); renderToday(); toast("研究记录已存。");
+}
+function switchTo(id){
+  var a = state.actions.find(function(x){ return x.id===id; });
+  if(!a || a.status==="done") return false;
+  state.metrics.switches = (Number(state.metrics.switches)||0)+1;
+  state.currentId = a.id;
+  timer.actionId = a.id; timer.total = timerFor(a); timer.remaining = timer.total; timer.timeUp = false;
+  pauseTimer();
+  save(); render(); toast("已切换：" + (a.title.length>14?a.title.slice(0,14)+"…":a.title));
+  return true;
+}
+function nextSwitch(){
+  var a = current(); if(!a) return false;
+  var n = nextTodo(a.id) || a; return switchTo(n.id);
+}
+
+/* ---------- 事件：全局点击 ---------- */
+document.addEventListener("click", function(e){
+  var t = e.target.closest("[data-act]");
+  if(!t) return;
+  var act = t.getAttribute("data-act");
+  if(act==="go"){ startAction(t.getAttribute("data-id")); }
+  else if(act==="editAction"){ openEditAction(t.getAttribute("data-id")); }
+  else if(act==="check"){
+    var k = t.getAttribute("data-key");
+    state.checks[k] = !state.checks[k]; save();
+    t.setAttribute("aria-pressed", String(state.checks[k]));
+  }
+  else if(act==="parkDel"){
+    state.parking = state.parking.filter(function(p){ return p.id!==t.getAttribute("data-id"); });
+    save(); renderChapter();
+  }
+  else if(act==="step"){ closeStep = Math.max(0, Math.min(5, closeStep + Number(t.getAttribute("data-dir")))); renderClose(); window.scrollTo({top:0,behavior:"smooth"}); }
+  else if(act==="finishClose"){ finishClose(); }
+  else if(act==="goToday"){ go("today"); }
+  else if(act==="goReview"){ go("review"); }
+  else if(act==="reviewStart"){ review = {id:t.getAttribute("data-id"), idx:0}; renderReview(); window.scrollTo(0,0); }
+  else if(act==="reviewNext"){ review.idx++; renderReview(); window.scrollTo(0,0); }
+  else if(act==="reviewExit"){ review=null; renderReview(); }
+  else if(act==="rate"){ rateReview(t.getAttribute("data-rate")); }
+});
+
+/* ---------- 事件：输入 ---------- */
+document.addEventListener("input", function(e){
+  var f = e.target.closest("[data-field]");
+  if(!f) return;
+  var key = f.getAttribute("data-field");
+  if(key.charAt(0)==="q" || key.charAt(0)==="a"){
+    state.retrieval[key] = f.value;
+  }else{
+    state[key] = f.value;
+  }
+  save();
+});
+document.addEventListener("change", function(e){
+  var f = e.target.closest("select[data-field]");
+  if(!f) return;
+  state[f.getAttribute("data-field")] = f.value; save();
+});
+
+/* ---------- 弹层：编辑章节 ---------- */
+function openEditChapter(){
+  openSheet({
+    title:"这一章",
+    hint:"书名、章节和交付目标会出现在今日页。",
+    body:'<label class="field"><span>书名</span><input id="fBook" value="'+esc(state.book)+'" placeholder="例：国家的视角"></label>'+
+      '<label class="field"><span>章节</span><input id="fChapter" value="'+esc(state.chapter)+'" placeholder="例：第九章 · 米提斯"></label>'+
+      '<label class="field"><span>这次要交付什么</span><textarea id="fGoal" rows="3">'+esc(state.goal)+"</textarea></label>"+
+      '<label class="field"><span>完成标准</span><textarea id="fFinish" rows="2">'+esc(state.finish)+"</textarea></label>",
+    confirm:"保存",
+    onConfirm:function(d){
+      state.book = d.querySelector("#fBook").value.trim();
+      state.chapter = d.querySelector("#fChapter").value.trim();
+      state.goal = d.querySelector("#fGoal").value.trim();
+      state.finish = d.querySelector("#fFinish").value.trim();
+      save(); render();
+      return true;
+    }
+  });
+}
+
+/* ---------- 弹层：编辑动作 ---------- */
+function openEditAction(id){
+  var a = state.actions.find(function(x){ return x.id===id; }); if(!a) return;
+  openSheet({
+    title:"编辑动作",
+    body:'<label class="field"><span>动作（动词 + 产出）</span><input id="fTitle" value="'+esc(a.title)+'"></label>'+
+      '<label class="field"><span>完成标准</span><input id="fOutput" value="'+esc(a.output)+'"></label>'+
+      '<div style="display:flex;gap:16px;flex-wrap:wrap">'+
+        '<label class="field" style="flex:1;min-width:120px"><span>预计分钟</span><input id="fMin" type="number" min="1" max="180" value="'+(Number(a.minutes)||25)+'"></label>'+
+        '<label class="field" style="flex:1;min-width:120px"><span>信息是否够</span><select id="fNeed">'+["够","缺","待定"].map(function(v){ return '<option '+(a.need===v?"selected":"")+">"+v+"</option>"; }).join("")+"</select></label>"+
+      "</div>"+
+      '<div class="step-nav"><button class="textbtn" id="fDel" type="button" style="color:var(--danger)">删掉这个动作</button></div>',
+    confirm:"保存",
+    onConfirm:function(d){
+      var del = d.querySelector("#fDel");
+      if(del && del.dataset.del==="1"){
+        state.actions = state.actions.filter(function(x){ return x.id!==id; });
+        if(!state.actions.length) state.actions = clone(DEFAULT.actions);
+        if(state.currentId===id) state.currentId = state.actions[0].id;
+        save(); render(); toast("已删除。");
+        return true;
+      }
+      a.title = d.querySelector("#fTitle").value.trim();
+      a.output = d.querySelector("#fOutput").value.trim();
+      a.minutes = Math.max(1, Math.min(180, Number(d.querySelector("#fMin").value)||25));
+      a.need = d.querySelector("#fNeed").value;
+      save(); render();
+      return true;
+    }
+  });
+  var del = dlg.querySelector("#fDel");
+  if(del) del.addEventListener("click", function(){ del.dataset.del="1"; del.textContent="再点「保存」确认删除"; del.style.color="var(--danger)"; });
+}
+
+/* ---------- 弹层：完成动作 ---------- */
+function openCapsule(){
+  var a = current(); if(!a) return;
+  openSheet({
+    title:"留一句上下文",
+    hint:"不是总结，是给下一次的自己留入口。",
+    body:'<label class="field"><span>我做到哪了 / 下一步是什么</span><textarea id="capsuleText" rows="4">'+esc(a.capsule||"")+"</textarea></label>",
+    confirm:"保存并完成",
+    onConfirm:function(d){ finishAction(d.querySelector("#capsuleText").value || "完成"); return true; }
+  });
+}
+
+/* ---------- 弹层：查资料 ---------- */
+function openResearch(){
+  researchWasRunning = timer.running;
+  pauseTimer();
+  researchStartedAt = Date.now();
+  openSheet({
+    title:"研究模式 · 只查一个问题",
+    hint:"十分钟，只解决一个具体问题。查完回到动作。",
+    body:'<label class="field"><span>我要查什么</span><input id="researchQ" placeholder="写成一个问题，不要写“查一下”"></label>'+
+      '<label class="field"><span>来源</span><input id="researchSource" placeholder="书名 / 页面 / 链接"></label>'+
+      '<label class="field"><span>查到了什么（一句话）</span><textarea id="researchA" rows="3"></textarea></label>',
+    confirm:"结束研究，回到动作",
+    onConfirm:function(d){
+      addResearch({question:d.querySelector("#researchQ").value,source:d.querySelector("#researchSource").value,answer:d.querySelector("#researchA").value});
+      if(researchWasRunning) startTimer();
+      return true;
+    }
+  });
+}
+
+/* ---------- 弹层：停车 ---------- */
+function openPark(){
+  openSheet({
+    title:"放进停车区",
+    hint:"先不做。写下来，它就不会在脑子里占地方。",
+    body:'<label class="field"><span>想到的事</span><input id="parkText" placeholder="例：查一下韦伯的“合理化”"></label>',
+    confirm:"放进去",
+    onConfirm:function(d){ return addParking(d.querySelector("#parkText").value); }
+  });
+}
+
+/* ---------- 弹层：切换 ---------- */
+function openSwitch(){
+  var a = current();
+  var opts = state.actions.filter(function(x){ return x.status!=="done" && (!a || x.id!==a.id); });
+  if(!opts.length){ toast("没有别的动作可切了。"); return; }
+  openSheet({
+    title:"切换到哪个动作",
+    hint:"切换会记一次成本。选一个现在能推进的。",
+    body:'<div class="switch-list">'+opts.map(function(x,i){
+      return '<label class="check" style="margin-bottom:8px"><input type="radio" name="sw" value="'+esc(x.id)+'" '+(i===0?"checked":"")+' style="width:16px;height:16px;accent-color:var(--accent)"> '+esc(x.title)+"</label>";
+    }).join("")+"</div>",
+    confirm:"切换",
+    onConfirm:function(d){
+      var r = d.querySelector('input[name="sw"]:checked');
+      return r ? switchTo(r.value) : false;
+    }
+  });
+}
+
+/* ---------- 弹层：外观 ---------- */
+function openAppearance(){
+  var groups = [
+    {key:"theme", name:"色调", vals:[["sky","晴蓝"],["cream","奶油"],["mist","雾灰"]]},
+    {key:"density", name:"密度", vals:[["cozy","舒展"],["compact","紧凑"]]},
+    {key:"display", name:"标题", vals:[["serif","宋体"],["sans","黑体"]]}
+  ];
+  openSheet({
+    title:"外观",
+    hint:"先按手感调到顺眼，再告诉我你选了什么。",
+    body:groups.map(function(g){
+      return '<div class="seg-row"><span class="seg-name">'+g.name+"</span>"+g.vals.map(function(v){
+        return '<button type="button" class="seg '+(ui[g.key]===v[0]?"is-on":"")+'" data-ui="'+g.key+'" data-val="'+v[0]+'">'+v[1]+"</button>";
+      }).join("")+"</div>";
+    }).join(""),
+    confirm:"完成",
+    onConfirm:function(){ return true; }
+  });
+}
+
+/* ---------- 收束完成 ---------- */
+function finishClose(){
+  var qs = [state.retrieval.q1,state.retrieval.q2,state.retrieval.q3].filter(function(q){ return q && q.trim(); });
+  if(qs.length<1){ toast("至少写一个检索问题，再收束。"); return; }
+  var rec = {
+    id:uid(), date:todayStr(), book:state.book, chapter:state.chapter, goal:state.goal,
+    questions:[state.retrieval.q1,state.retrieval.q2,state.retrieval.q3],
+    answers:[state.retrieval.a1,state.retrieval.a2,state.retrieval.a3],
+    explanation:state.explanation, confidenceBefore:state.confidenceBefore, confidenceAfter:state.confidenceAfter,
+    cardDraft:state.cardDraft, research:state.research,
+    reviewDates:[addDays(1),addDays(3),addDays(7),addDays(14)], nextDue:addDays(1), reviewed:[]
+  };
+  history.push(rec); saveHistory();
+  closeStep = 5; renderClose(); window.scrollTo(0,0);
+}
+
+/* ---------- 复习评分 ---------- */
+function rateReview(rate){
+  if(!review) return;
+  var rec = history.find(function(h){ return h.id===review.id; });
+  if(!rec) return;
+  var d = rate==="forgot" ? 1 : (rate==="fuzzy" ? 3 : 7);
+  rec.reviewed = rec.reviewed || [];
+  rec.reviewed.push({date:todayStr(), quality:rate});
+  rec.nextDue = addDays(d);
+  saveHistory();
+  review = null;
+  renderReview();
+  toast("下次复习：" + fmtDate(rec.nextDue));
+}
+
+/* ---------- 导出 / 打印 ---------- */
+function exportChapter(){
+  var lines = [];
+  lines.push("# 学习台 · 一章书","");
+  lines.push("书名："+(state.book||"—")); lines.push("章节："+(state.chapter||"—")); lines.push("");
+  lines.push("## 目标"); lines.push(state.goal||"—"); lines.push("");
+  lines.push("## 完成标准"); lines.push(state.finish||"—"); lines.push("");
+  lines.push("## 任务地图");
+  state.actions.forEach(function(a,i){ lines.push((i+1)+". "+a.title+" ｜ 产出："+(a.output||"—")+" ｜ "+a.need+" ｜ "+a.minutes+" 分 ｜ "+a.status); });
+  lines.push("");
+  lines.push("## 检索问题");
+  [1,2,3].forEach(function(i){ lines.push("Q"+i+"："+(state.retrieval["q"+i]||"—")); lines.push("A"+i+"："+(state.retrieval["a"+i]||"—")); });
+  lines.push(""); lines.push("## 自我解释"); lines.push(state.explanation||"—"); lines.push("");
+  lines.push("## 置信"); lines.push("开始前："+(state.confidenceBefore||"—")+" / 现在："+(state.confidenceAfter||"—")); lines.push("");
+  lines.push("## 判断卡草稿"); lines.push(state.cardDraft||"—"); lines.push("");
+  lines.push("## 查资料记录");
+  state.research.forEach(function(r){ lines.push("- 问题："+r.q+" ｜ 来源："+r.source+" ｜ 答案："+r.a); });
+  var blob = new Blob([lines.join("\n")], {type:"text/markdown;charset=utf-8"});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url; a.download = "学习台-一章书-"+(state.chapter||todayStr())+".md";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+}
+
+/* ---------- 静态按钮 ---------- */
+$("#startRun").addEventListener("click", function(){
+  var a = current();
+  if(!a){ go("close"); return; }
+  state.currentId = a.id; save(); go("focus");
+});
+$("#editChapter").addEventListener("click", openEditChapter);
+$("#chapterStart").addEventListener("click", function(){ var a=current(); if(a) startAction(a.id); else go("close"); });
+$("#addAction").addEventListener("click", function(){
+  var a = {id:uid(),title:"",output:"",need:"够",minutes:10,status:"todo",capsule:""};
+  state.actions.push(a); save(); renderChapter(); openEditAction(a.id);
+});
+$("#addPark").addEventListener("click", function(){ addParking($("#parkInput").value); $("#parkInput").value=""; });
+$("#parkInput").addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); addParking(this.value); this.value=""; } });
+$("#exportBtn").addEventListener("click", exportChapter);
+$("#printBtn").addEventListener("click", function(){ window.print(); });
+$("#appearanceBtn").addEventListener("click", openAppearance);
+$("#leaveFocus").addEventListener("click", function(){ pauseTimer(); go("today"); });
+$("#doneAction").addEventListener("click", openCapsule);
+$("#toggleTimer").addEventListener("click", function(){
+  if(timer.timeUp){ timer.timeUp=false; timer.remaining=5*60; timer.total=Math.max(timer.total,5*60); startTimer(); return; }
+  if(timer.running) pauseTimer(); else startTimer();
+});
+$("#menuBtn").addEventListener("click", function(e){
+  e.stopPropagation();
+  var m = $("#focusMenu");
+  m.hidden = !m.hidden;
+  this.setAttribute("aria-expanded", String(!m.hidden));
+});
+$("#focusMenu").addEventListener("click", function(e){ e.stopPropagation(); });
+document.addEventListener("click", function(e){
+  var m = $("#focusMenu");
+  if(!m || m.hidden) return;
+  if(e.target.closest("#menuBtn") || e.target.closest("#focusMenu")) return;
+  m.hidden = true; $("#menuBtn").setAttribute("aria-expanded","false");
+});
+$("#presetRow").addEventListener("click", function(e){
+  var b = e.target.closest("[data-preset]"); if(!b) return;
+  pauseTimer();
+  timer.total = Number(b.getAttribute("data-preset"))*60;
+  timer.remaining = timer.total; timer.timeUp = false;
+  renderFocus(); toast("这一轮 "+b.getAttribute("data-preset")+" 分钟。");
+});
+$("#menuResearch").addEventListener("click", function(){ $("#focusMenu").hidden=true; openResearch(); });
+$("#menuSwitch").addEventListener("click", function(){ $("#focusMenu").hidden=true; openSwitch(); });
+$("#menuPark").addEventListener("click", function(){ $("#focusMenu").hidden=true; openPark(); });
+$("#menuDistract").addEventListener("click", function(){ $("#focusMenu").hidden=true; addDistract(); });
+document.addEventListener("keydown", function(e){
+  if(e.key==="Escape"){ var m=$("#focusMenu"); if(m && !m.hidden){ m.hidden=true; $("#menuBtn").setAttribute("aria-expanded","false"); } }
+  if(e.code==="Space" && route==="focus" && !e.target.closest("input,textarea,select,button")){
+    e.preventDefault();
+    if(timer.running) pauseTimer(); else startTimer();
+  }
+});
+
+/* ---------- 语音 / Host 正式 API ---------- */
+window.StudyDesk = {
+  start: function(){ var a=current(); if(!a){ go("close"); return true; } state.currentId=a.id; save(); go("focus"); startTimer(); return true; },
+  done: function(payload){ finishAction((payload&&payload.capsule)||"语音完成"); return true; },
+  research: function(payload){ addResearch(payload||{}); return true; },
+  park: function(payload){ return addParking((payload&&payload.text)||"语音记录"); },
+  "switch": function(){ return nextSwitch(); },
+  distract: function(){ addDistract(); return true; },
+  review: function(){ go("review"); return true; },
+  report: function(){ return true; },
+  getState: function(){ return state; }
+};
+
+/* ---------- 启动 ---------- */
+applyUi();
+var demo = /(\?|&)demo=1/.test(location.search);
+var hasSaved = false;
+try{ hasSaved = !!localStorage.getItem(KEY); }catch(e){}
+if(demo && !hasSaved){
+  var d = clone(DEFAULT);
+  d.book = "国家的视角"; d.chapter = "第九章 · 米提斯";
+  d.actions = d.actions.map(function(a,i){
+    if(i<3){ a.status="done"; a.capsule = i===2 ? "读到米提斯与技术知识的对立：国家看不见地方性知识。下一步：精读 576–590 页。" : ""; }
+    return a;
+  });
+  d.metrics = {startedAt:null,researchSeconds:1440,switches:1,distractions:1,completed:3};
+  d.currentId = d.actions[3].id;
+  state = d;
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+}
+if(demo && !history.length){
+  history.push({
+    id:uid(), date:addDays(-2), book:"国家的视角", chapter:"第八章 · 看得见与看不见",
+    goal:"", questions:["国家为什么看不见地方知识？","“科学林业”怎样把森林变成数字？",""], answers:["","",""],
+    explanation:"", confidenceBefore:"3", confidenceAfter:"6", cardDraft:"", research:[],
+    reviewDates:[addDays(-1),addDays(1),addDays(5),addDays(12)], nextDue:addDays(-1), reviewed:[]
+  });
+  history.push({
+    id:uid(), date:addDays(-1), book:"国家的视角", chapter:"第九章 · 米提斯",
+    goal:"", questions:["米提斯和“技术知识”的差别在哪？","为什么规划者越精确，越看不见？",""], answers:["","",""],
+    explanation:"", confidenceBefore:"4", confidenceAfter:"5", cardDraft:"", research:[],
+    reviewDates:[addDays(1),addDays(3),addDays(7),addDays(14)], nextDue:addDays(2), reviewed:[]
+  });
+  saveHistory();
+}
+window.addEventListener("hashchange", onRoute);
+onRoute();
+})();
+</script>
+</body>
+</html>
