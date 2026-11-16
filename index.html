@@ -19,7 +19,7 @@
   --night:#18272F; --night-ink:#EAF0F3; --night-muted:#9AACB3;
   --line:#C0D3DD;
   --island:#F7FAFB; --island-ink:#1A252B; --island-muted:#5A6A72; --island-line:#D9E3E8;
-  --cta-bg:#14232B; --cta-ink:#EAF0F3; --screen-bg:#0D171C;
+  --cta-bg:#14232B; --cta-ink:#EAF0F3; --screen-bg:#1B3550;
   --tone-1:#E6F0F5; --tone-2:#DEEAF1; --tone-3:#D6E3EB;
   --font-display:"ShowcaseSerif","Noto Serif SC","Source Han Serif SC","Songti SC",serif;
   --font-text:"ShowcaseSans","Noto Sans SC","Source Han Sans SC","Microsoft YaHei",sans-serif;
@@ -132,6 +132,7 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
 .power .para b{font-weight:500}
 .power .note{color:var(--night-muted);margin-top:18px}
 .machine-link{margin-top:24px}
+.link-dot{color:var(--muted);margin:0 .5em}
 .power-link{margin-top:26px}
 .power .quiet-link{color:var(--night-muted);text-decoration-color:var(--night-muted)}
 @media (hover:hover) and (pointer:fine){ .power .quiet-link:hover{color:var(--night-ink);text-decoration-color:var(--night-ink)} }
@@ -186,8 +187,8 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
 .screen{width:min(352px,70vw);aspect-ratio:4/3;background:var(--screen-bg);color:var(--night-ink);border-radius:18px;padding:clamp(18px,2.4vw,26px);display:flex;flex-direction:column;justify-content:space-between}
 .screen-time{font-family:var(--font-display);font-size:var(--t-figure);line-height:1;letter-spacing:.01em}
 .cta .screen-label{font-size:var(--t-small);color:var(--night-muted)}
-.cta .screen-time{font-size:var(--t-figure);color:var(--night-ink)}
-.cta .screen-btn{align-self:flex-start;font-size:var(--t-small);line-height:1;padding:9px 16px;border-radius:999px;background:var(--island);color:var(--island-ink)!important}
+.cta .screen-time{font-size:var(--t-figure);color:#F8E3B0}
+.cta .screen-btn{align-self:flex-start;font-size:var(--t-small);line-height:1;padding:9px 16px;border-radius:999px;background:#F3C963;color:#22364D!important}
 
 /* ---------- footer ---------- */
 .footer{padding:clamp(46px,7vh,80px) var(--margin) 34px;display:grid;grid-template-columns:1fr auto 1fr;gap:16px 24px;align-items:baseline;font-size:var(--t-small);color:var(--muted)}
@@ -284,13 +285,14 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
           <tr><th scope="row">停靠角</th><td>15°<span>底座 100 × 80 mm</span></td></tr>
           <tr><th scope="row">整机质量</th><td>约 389 g<span>含 2S 电池</span></td></tr>
           <tr><th scope="row">重心 / 摆长</th><td>73.6 / 43.6 mm<span>电池压在最下</span></td></tr>
-          <tr><th scope="row">屏幕</th><td>2.0 英寸 320 × 240<span>SPI · ST7789</span></td></tr>
-          <tr><th scope="row">电池</th><td>2S 18650，约 37 × 65 × 19 mm<span>15 A 保护板；待实测</span></td></tr>
+          <tr><th scope="row">屏幕</th><td>2.0 英寸 320 × 240<span>SPI · ST7789 · 屏窗 46 × 38</span></td></tr>
+          <tr><th scope="row">主板</th><td>90 × 72 mm + DevKitC<span>竖置屏后，z 84–96</span></td></tr>
+          <tr><th scope="row">电池</th><td>2S 18650<span>内胆净空 40 × 66 × 25；整包约 37 × 65 × 19</span></td></tr>
         </tbody>
       </table>
       <p class="para" data-reveal style="--i:3">电池压在最下面，重心落在轴上方 43.6 mm。12° 倾角每轮需要 17.3 mN·m，N20 6 V 200–300 rpm 留了 1.4 倍余量。内部从下到上是电池、喇叭、主板、屏。</p>
       <p class="note" data-reveal>外壳为猫形概念渲染；结构件用 PETG 打印，前壳、后壳、电池盖分三件。</p>
-      <p class="machine-link" data-reveal>想自己拆一遍？<a class="quiet-link" href="whole-machine-3d.html" target="_blank" rel="noopener">拆开看整机 ↗</a></p>
+      <p class="machine-link" data-reveal>想拆开看？<a class="quiet-link" href="whole-machine-3d.html" target="_blank" rel="noopener">拆开看整机 ↗</a><span class="link-dot">·</span><a class="quiet-link" href="assets/inner_section.webp" target="_blank" rel="noopener">看内胆分区 ↗</a></p>
     </section>
 
     <section class="block system" aria-labelledby="system-head" data-stage="system">
@@ -323,10 +325,10 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
           <img src="assets/cat_three_quarter.webp" width="666" height="666" alt="猫形外壳概念渲染：白色机身，正面是深色屏幕，顶部两只耳朵，侧面露出半个轮子">
         </figure>
         <figure class="art" data-art="intro" aria-hidden="true">
-          <img src="assets/cat_front.webp" width="666" height="666" alt="猫形外壳正视图：屏幕居中，耳朵在上方，两只轮子分别在机身下方两侧" loading="lazy">
+          <img src="assets/cat_front.webp" width="666" height="666" alt="猫形外壳正视图：屏幕居中，耳朵在上方，两只轮子分别在机身下方两侧">
         </figure>
         <figure class="art" data-art="form" aria-hidden="true">
-          <img src="assets/exploded.webp" width="1260" height="1260" alt="整机分层轴测图：顶板、显示屏、主板、喇叭、2S 电池、轮与电机，从上到下排开" loading="lazy">
+          <img src="assets/exploded.webp" width="1260" height="1260" alt="整机分层轴测图：顶板、显示屏、主板、喇叭、2S 电池、轮与电机，从上到下排开">
         </figure>
         <figure class="art" data-art="system" aria-hidden="true">
           <div class="layers">
@@ -391,12 +393,12 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
 <section class="split" id="part2">
   <div class="read">
     <section class="block software" aria-labelledby="software-head" data-stage="software">
-      <h2 id="software-head" data-reveal>纸，和灯</h2>
+      <h2 id="software-head" data-reveal>晴蓝玻璃</h2>
       <p class="lead" data-reveal style="--i:1">上位机不另写一套界面。Host 把桥接脚本注入学习台，镜像状态、接语音、驱动机器人；学习台只有五屏。</p>
       <div class="context" data-reveal style="--i:2">
         <p>完成一步时留一句上下文：读到米提斯与技术知识的对立，下一步精读 576–590 页。下次回来，今日页右栏就是它。</p>
         <figure class="fragment">
-          <img src="assets/today_capsule.webp" width="360" height="320" alt="学习台今日页右栏的「上次停在这里」卡片：读到米提斯与技术知识的对立，下一步精读 576–590 页，3/7 个动作完成" loading="lazy">
+          <img src="assets/today_capsule.webp" width="355" height="325" alt="学习台今日页右栏的「上次停在这里」玻璃卡：读到米提斯与技术知识的对立，下一步精读 576–590 页，3/7 个动作完成" loading="lazy">
           <figcaption>学习台 · 上次停在这里（原型截图，2026 年 11 月）</figcaption>
         </figure>
       </div>
@@ -414,8 +416,8 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
           <p>毛时长减去落在专注区间内的离开时间，才叫 focus_min；在座率单独报，不合成一个「专注分数」。</p>
         </div>
         <div data-reveal style="--i:3">
-          <h3>关灯</h3>
-          <p>点开始专注，整页在 0.5 秒里沉成暖黑，计时器成为唯一亮的东西；离开就回到纸。</p>
+          <h3>外观</h3>
+          <p>晴蓝玻璃：天光蓝底、奶油色磨砂卡、黄油色只给当前动作；外观三档 晴蓝 / 奶油 / 雾灰。专注页沉进夜蓝玻璃窗，计时器是唯一亮的东西。</p>
         </div>
       </div>
     </section>
@@ -429,7 +431,7 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
           <ul>
             <li>电源板六页原理图<span>顶层 ERC 0 错 0 警告</span></li>
             <li>四层板重排版 v1<span>布线完成，DRC 10 项待清</span></li>
-            <li>学习台 v2 原型<span>单文件，可直接打开</span></li>
+            <li>学习台 v2 原型<span>晴蓝玻璃 · 17 项冒烟</span></li>
             <li>Host 与桥接<span>44 项验收通过</span></li>
             <li>文献清单<span>16 条，外文 6 条</span></li>
           </ul>
@@ -463,13 +465,13 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
     <div class="stage">
       <div class="tile">
         <figure class="art is-on" data-art="software">
-          <img src="assets/focus.webp" width="900" height="900" alt="学习台专注页：暖黑背景，屏幕中央显示动作标题与 25:00 倒计时" loading="lazy">
+          <img src="assets/focus.webp" width="900" height="900" alt="学习台专注页：夜蓝玻璃背景，中央显示动作标题与奶油黄的 25:00 倒计时">
         </figure>
         <figure class="art" data-art="status" aria-hidden="true">
-          <img src="assets/pcb.webp" width="592" height="592" alt="电源板四层板布线图：蓝色板身，白色走线与红色焊盘" loading="lazy">
+          <img src="assets/pcb.webp" width="592" height="592" alt="电源板四层板布线图：蓝色板身，白色走线与红色焊盘">
         </figure>
       </div>
-      <p class="caption"><b id="capName2">学习台 · 专注</b><span id="capFact2">关灯，只剩计时器</span></p>
+      <p class="caption"><b id="capName2">学习台 · 专注</b><span id="capFact2">夜蓝玻璃窗，只剩计时器</span></p>
     </div>
   </div>
 </section>
@@ -585,7 +587,7 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
     intro: ["正视", "100 × 100 × 150 mm 外壳"],
     form: ["整机分层", "电池在最下，屏在最上"],
     system: ["三层架构", "云端 · 上位机 · 机器人"],
-    software: ["学习台 · 专注", "关灯，只剩计时器"],
+    software: ["学习台 · 专注", "夜蓝玻璃窗，只剩计时器"],
     status: ["电源板", "四层 · 布线 v5"]
   };
   var arts = Array.prototype.slice.call(document.querySelectorAll(".art"));
@@ -609,6 +611,21 @@ table.spec td span{color:var(--muted);font-size:var(--t-small);margin-left:8px}
       });
     }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
     document.querySelectorAll("[data-stage]").forEach(function(s){ stageIO.observe(s); });
+
+    /* 某一段的展台进入视野时，先把该段的默认展品放上，避免切换瞬间出现空白卡 */
+    Array.prototype.slice.call(document.querySelectorAll(".stagecol")).forEach(function(col){
+      var def = col.querySelector(".art.is-on");
+      if (!def) return;
+      var defKey = def.dataset.art;
+      var partIO = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (!en.isIntersecting) return;
+          var on = document.querySelector(".art.is-on");
+          if (!on || on.closest(".stagecol") !== col) setStage(defKey);
+        });
+      }, { threshold: 0.01 });
+      partIO.observe(col);
+    });
   }
 
   /* 进场：每节的标题、正文、图分开到位 */
